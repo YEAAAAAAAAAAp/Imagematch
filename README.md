@@ -5,7 +5,8 @@
 - 백엔드: FastAPI + CLIP (HuggingFace Transformers, PyTorch)
 - 임베딩: CLIP ViT-B/32 이미지 임베딩 (코사인 유사도)
 - 인덱스: 배우별 대표 임베딩(여러 장 평균) + 메타데이터(JSON)
-- 프론트엔드: 간단한 정적 HTML 업로드 페이지 (`frontend/index.html`)
+- 프론트엔드: Next.js(App Router) + Tailwind UI (드래그&드롭, 미리보기, 진행률, Top‑K 슬라이더, 다중 업로드)
+  - 참고: 과거 `frontend/index.html` 정적 페이지는 더 이상 사용하지 않으며, Next.js 앱이 대체합니다.
 
 ## 폴더 구조
 
@@ -21,7 +22,16 @@ backend/
   scripts/
     build_actor_index.py   # 데이터셋에서 배우 인덱스 생성
 frontend/
-  index.html               # 업로드/결과 확인용 간단 페이지
+  app/                     # Next.js App Router (페이지/라우트)
+    api/
+      match-actors/route.ts          # 단일 업로드 프록시 → FastAPI
+      match-actors-batch/route.ts    # 배치 업로드 프록시 → FastAPI
+    layout.tsx
+    page.tsx               # 업로드 UI (드래그&드롭/미리보기/Top‑K/다중 업로드)
+    globals.css            # Tailwind 활성화
+  next.config.mjs          # Next/Image 원격 패턴 설정(백엔드 정적 이미지)
+  package.json             # Next/React 의존성
+  postcss.config.js, tailwind.config.js
 requirements.txt           # Python 의존성
 README.md                  # 이 문서
 ```
@@ -100,7 +110,11 @@ uvicorn backend.app.main:app --reload --port 8000
 
 ```powershell
 cd frontend
-copy .env.local.example .env.local
+# 환경 변수 파일 생성(.env)
+# 로컬 개발 예시
+"@"
+Add-Content .env "BACKEND_URL=http://localhost:8000"
+Add-Content .env "NEXT_PUBLIC_BACKEND_URL=http://localhost:8000"
 npm install
 npm run dev
 ```
@@ -110,6 +124,19 @@ npm run dev
 - API:
   - 단일: `POST http://localhost:8000/match-actors?top_k=3` (form-data: file=이미지)
   - 배치: `POST http://localhost:8000/match-actors-batch?top_k=3` (form-data: files=이미지들)
+
+## 환경 변수(프론트)
+
+- BACKEND_URL: 프록시 서버 라우트가 참조하는 FastAPI 주소
+- NEXT_PUBLIC_BACKEND_URL: 브라우저에서 배우 이미지 URL(`/actors/...`)을 만들 때 사용(공개)
+
+로컬 개발:
+```
+BACKEND_URL=http://localhost:8000
+NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
+```
+
+프로덕션(Vercel): 프로젝트 Settings > Environment Variables에 같은 키를 프로덕션 URL로 입력하세요.
 
 ## 동작 방식
 
@@ -123,7 +150,8 @@ npm run dev
   - 아닙니다. CPU로도 동작합니다. 다만 최초 모델 로드가 느릴 수 있습니다.
 
 - 인덱스를 만들기 전 요청하면?
-  - 503 오류와 함께 "Actor index not built" 메시지를 보냅니다. 먼저 인덱스를 만들어 주세요.
+  - 인덱스 파일이 없으면 503 에러를 반환합니다.
+  - 인덱스가 "존재하지만 비어있는(0명)" 경우에는 200 OK와 함께 빈 `results` 배열을 반환합니다.
 
 - 얼굴 인식 전용 모델인가요?
   - CLIP은 일반 이미지 임베딩 모델입니다. 얼굴 전용 모델보다 정확도는 낮을 수 있지만, 설치와 운용이 쉽습니다. 더 높은 정확도가 필요하면 FaceNet/ArcFace/InsightFace 등으로 교체 가능합니다.
@@ -135,6 +163,15 @@ npm run dev
 ```powershell
 pytest -q
 ```
+
+## 배포(Vercel)
+
+1) GitHub 레포를 Vercel에 Import (Framework: Next.js)
+2) 환경 변수 등록(BACKEND_URL, NEXT_PUBLIC_BACKEND_URL)
+3) 배포 후 https://{vercel-domain} 접속 → 업로드/결과 확인
+
+원격 이미지(배우 대표 이미지)를 Next/Image로 최적화하려면 `next.config.mjs`의 `images.remotePatterns`에
+프로덕션 백엔드 도메인을 명시적으로 추가하세요.
 
 ## 향후 개선 아이디어
 
