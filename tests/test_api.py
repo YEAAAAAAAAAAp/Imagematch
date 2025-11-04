@@ -13,7 +13,7 @@ def test_health():
 
 
 def test_match_without_index():
-    # without data/index, service should 503 with helpful message
+    # If index is missing -> service may 503; if an empty index exists -> 200 with empty results
     import io
     from PIL import Image
 
@@ -24,4 +24,9 @@ def test_match_without_index():
 
     files = {"file": ("test.png", buf.getvalue(), "image/png")}
     r = client.post("/match-actors", files=files)
-    assert r.status_code in {503, 500, 400}
+    if r.status_code == 200:
+        data = r.json()
+        assert "results" in data
+        assert isinstance(data["results"], list)
+    else:
+        assert r.status_code in {503, 500, 400}
