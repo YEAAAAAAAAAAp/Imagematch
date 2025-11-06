@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import Image from 'next/image'
 
 type MatchResult = {
@@ -21,8 +21,21 @@ export default function Page() {
   const [topK, setTopK] = useState<number>(3)
   const [progress, setProgress] = useState<number>(0)
   const [isDragActive, setIsDragActive] = useState(false)
+  const [particles, setParticles] = useState<Array<{id: number, x: number, y: number, size: number, delay: number}>>([])
 
   const backendPublic = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'
+
+  // Generate floating particles on mount
+  useEffect(() => {
+    const newParticles = Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 4 + 2,
+      delay: Math.random() * 5
+    }))
+    setParticles(newParticles)
+  }, [])
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -93,33 +106,69 @@ export default function Page() {
   const previews = useMemo(() => files.map((f: File) => ({ name: f.name, url: URL.createObjectURL(f) })), [files])
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="text-4xl">🎭</span>
-                Actor Match AI
-              </h1>
-              <p className="text-gray-600 mt-1">AI 기반 배우 유사도 분석 서비스</p>
-            </div>
-            {files.length > 0 && (
-              <button
-                onClick={clearAll}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all"
-              >
-                전체 초기화
-              </button>
-            )}
-          </div>
-        </div>
-      </header>
+    <main className="min-h-screen relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
+        {/* Mesh Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 via-purple-500/20 to-pink-500/20 animate-pulse" />
+        
+        {/* Floating Particles */}
+        {particles.map((particle) => (
+          <div
+            key={particle.id}
+            className="absolute rounded-full bg-white/20 backdrop-blur-sm animate-float"
+            style={{
+              left: `${particle.x}%`,
+              top: `${particle.y}%`,
+              width: `${particle.size}px`,
+              height: `${particle.size}px`,
+              animationDelay: `${particle.delay}s`,
+              animationDuration: `${15 + Math.random() * 10}s`
+            }}
+          />
+        ))}
+        
+        {/* Radial Gradient Spots */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-pink-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Content */}
+      <div className="relative z-10">
+        {/* Header */}
+        <header className="backdrop-blur-md bg-white/10 border-b border-white/20 shadow-2xl">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <span className="text-5xl animate-bounce">🎭</span>
+                  <div className="absolute inset-0 blur-xl bg-purple-500/50 animate-pulse" />
+                </div>
+                <div>
+                  <h1 className="text-4xl font-bold text-white flex items-center gap-3">
+                    <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                      Actor Match AI
+                    </span>
+                  </h1>
+                  <p className="text-purple-200 mt-1 font-medium">AI 기반 배우 유사도 분석 서비스</p>
+                </div>
+              </div>
+              {files.length > 0 && (
+                <button
+                  onClick={clearAll}
+                  className="px-6 py-3 text-sm text-white/90 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-xl transition-all border border-white/20 hover:border-white/40 shadow-lg"
+                >
+                  전체 초기화
+                </button>
+              )}
+            </div>
+          </div>
+        </header>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Upload Section */}
-        <section className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+        <section className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl shadow-2xl p-8 mb-8">
           <form onSubmit={onSubmit} className="space-y-6">
             {/* Drag & Drop Area */}
             <div
@@ -127,40 +176,52 @@ export default function Page() {
               onDragOver={onDragOver}
               onDragLeave={onDragLeave}
               className={`
-                border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-300
+                relative border-2 border-dashed rounded-3xl p-12 text-center transition-all duration-300 overflow-hidden
                 ${isDragActive 
-                  ? 'border-blue-500 bg-blue-50 scale-105' 
-                  : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
+                  ? 'border-white/60 bg-white/20 scale-105 shadow-2xl' 
+                  : 'border-white/30 hover:border-white/50 hover:bg-white/10'
                 }
               `}
             >
-              <div className="flex flex-col items-center gap-4">
-                <div className="text-6xl">📸</div>
+              {/* Glow Effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-xl" />
+              
+              <div className="relative flex flex-col items-center gap-4">
+                <div className="relative">
+                  <div className="text-7xl animate-bounce">📸</div>
+                  <div className="absolute inset-0 blur-2xl bg-white/30 animate-pulse" />
+                </div>
                 <div>
-                  <p className="text-xl font-semibold text-gray-700 mb-2">
+                  <p className="text-2xl font-bold text-white mb-2">
                     {isDragActive ? '여기에 놓으세요!' : '이미지를 드래그하여 업로드'}
                   </p>
-                  <p className="text-gray-500 mb-4">또는 아래 버튼을 클릭하세요</p>
+                  <p className="text-purple-200 mb-4">또는 아래 버튼을 클릭하세요</p>
                 </div>
-                <label className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold cursor-pointer hover:from-blue-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg">
-                  파일 선택
+                <label className="relative group cursor-pointer">
+                  <div className="px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-bold text-lg shadow-2xl transition-all group-hover:shadow-purple-500/50 group-hover:scale-105">
+                    파일 선택
+                  </div>
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 blur-xl opacity-50 group-hover:opacity-75 transition-opacity" />
                   <input type="file" accept="image/*" multiple className="hidden" onChange={onInputChange} />
                 </label>
                 {files.length > 0 && (
-                  <p className="mt-2 text-sm font-medium text-blue-600">
-                    ✓ {files.length}개 파일 선택됨
-                  </p>
+                  <div className="mt-2 px-6 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30">
+                    <p className="text-sm font-bold text-white">
+                      ✓ {files.length}개 파일 선택됨
+                    </p>
+                  </div>
                 )}
               </div>
             </div>
 
             {/* Top-K Slider */}
-            <div className="bg-gray-50 rounded-xl p-6">
-              <div className="flex items-center justify-between mb-3">
-                <label htmlFor="topk" className="text-sm font-semibold text-gray-700">
+            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 shadow-xl">
+              <div className="flex items-center justify-between mb-4">
+                <label htmlFor="topk" className="text-lg font-bold text-white flex items-center gap-2">
+                  <span className="text-2xl">🎯</span>
                   결과 개수 (Top-K)
                 </label>
-                <span className="text-2xl font-bold text-blue-600 bg-white px-4 py-1 rounded-lg shadow-sm">
+                <span className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent px-6 py-2 rounded-xl backdrop-blur-md bg-white/20 border border-white/30 shadow-lg">
                   {topK}
                 </span>
               </div>
@@ -171,9 +232,9 @@ export default function Page() {
                 max={10}
                 value={topK}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTopK(parseInt(e.target.value))}
-                className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                className="w-full h-4 bg-white/20 rounded-full appearance-none cursor-pointer slider-thumb"
               />
-              <div className="flex justify-between text-xs text-gray-500 mt-2">
+              <div className="flex justify-between text-sm text-purple-200 mt-3 font-medium">
                 <span>1개</span>
                 <span>5개</span>
                 <span>10개</span>
@@ -182,16 +243,20 @@ export default function Page() {
 
             {/* Progress Bar */}
             {(loading || progress > 0) && (
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>{loading ? '분석 중...' : '완료!'}</span>
-                  <span>{progress}%</span>
+              <div className="space-y-3 backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 shadow-xl">
+                <div className="flex justify-between text-sm text-white font-medium">
+                  <span className="flex items-center gap-2">
+                    {loading && <span className="animate-spin">⚡</span>}
+                    {loading ? 'AI 분석 중...' : '완료!'}
+                  </span>
+                  <span className="font-bold">{progress}%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden shadow-inner">
+                <div className="relative w-full bg-white/10 rounded-full h-4 overflow-hidden shadow-inner border border-white/20">
                   <div
-                    className="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-300 ease-out"
+                    className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 h-4 rounded-full transition-all duration-300 ease-out shadow-lg"
                     style={{ width: `${progress}%` }}
                   />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
                 </div>
               </div>
             )}
@@ -200,27 +265,33 @@ export default function Page() {
             <button
               type="submit"
               disabled={loading || files.length === 0}
-              className="w-full px-6 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl disabled:hover:shadow-lg transform hover:scale-[1.02] disabled:hover:scale-100"
+              className="relative w-full group overflow-hidden rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  AI 분석 중...
-                </span>
-              ) : (
-                '🚀 분석 시작'
-              )}
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 blur-xl opacity-75 group-hover:opacity-100 transition-opacity" />
+              <div className="relative px-8 py-5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-bold text-xl shadow-2xl group-hover:shadow-purple-500/50 transition-all">
+                {loading ? (
+                  <span className="flex items-center justify-center gap-3">
+                    <svg className="animate-spin h-6 w-6" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    AI 분석 중...
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="text-2xl">🚀</span>
+                    분석 시작
+                  </span>
+                )}
+              </div>
             </button>
           </form>
 
           {/* Error Message */}
           {error && (
-            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl">
-              <p className="text-red-600 flex items-center gap-2">
-                <span className="text-xl">⚠️</span>
+            <div className="mt-6 p-5 backdrop-blur-md bg-red-500/20 border border-red-400/30 rounded-2xl shadow-xl">
+              <p className="text-red-100 flex items-center gap-3 font-medium">
+                <span className="text-2xl">⚠️</span>
                 {error}
               </p>
             </div>
@@ -230,25 +301,28 @@ export default function Page() {
         {/* Preview Section */}
         {previews.length > 0 && (
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <span>🖼️</span>
-              업로드된 이미지
+            <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+              <span className="text-4xl">🖼️</span>
+              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                업로드된 이미지
+              </span>
             </h2>
-            <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {previews.map((p, idx) => (
-                <div key={p.name} className="group relative bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all">
+                <div key={p.name} className="group relative backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-purple-500/30">
                   <div className="relative w-full aspect-square">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={p.url} alt={p.name} className="object-cover w-full h-full" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
                   <button
                     onClick={() => removeFile(idx)}
-                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                    className="absolute top-3 right-3 bg-red-500/90 backdrop-blur-md text-white rounded-full w-10 h-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-red-600 hover:scale-110 shadow-lg font-bold text-xl"
                   >
                     ×
                   </button>
-                  <div className="p-2 bg-white">
-                    <p className="text-xs text-gray-600 truncate">{p.name}</p>
+                  <div className="p-3 backdrop-blur-md bg-white/10 border-t border-white/20">
+                    <p className="text-xs text-white/90 truncate font-medium">{p.name}</p>
                   </div>
                 </div>
               ))}
@@ -259,34 +333,38 @@ export default function Page() {
         {/* Results Section */}
         {results.length > 0 && (
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <span>✨</span>
-              분석 결과
+            <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+              <span className="text-4xl">✨</span>
+              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                분석 결과
+              </span>
             </h2>
             <div className="grid gap-6 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
               {results.map((res, i) => (
-                <div key={`res-${i}`} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all">
-                  <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-4">
-                    <h3 className="font-bold text-white text-lg flex items-center gap-2">
-                      <span className="bg-white text-blue-600 rounded-full w-8 h-8 flex items-center justify-center font-bold">
+                <div key={`res-${i}`} className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-purple-500/30">
+                  <div className="relative bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-5 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <h3 className="relative font-bold text-white text-xl flex items-center gap-3 z-10">
+                      <span className="bg-white text-purple-600 rounded-full w-10 h-10 flex items-center justify-center font-bold shadow-lg">
                         {i + 1}
                       </span>
                       이미지 {i + 1}
                     </h3>
                   </div>
-                  <div className="p-4 space-y-3">
+                  <div className="p-5 space-y-4">
                     {res.length === 0 ? (
-                      <p className="text-gray-500 text-center py-8">매칭된 배우가 없습니다</p>
+                      <p className="text-purple-200 text-center py-12 font-medium">매칭된 배우가 없습니다</p>
                     ) : (
                       res.map((r, rank) => (
                         <div
                           key={`${i}-${r.name}`}
-                          className="flex items-center gap-4 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all"
+                          className="group flex items-center gap-4 p-4 backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl hover:bg-white/20 transition-all hover:scale-105 shadow-lg"
                         >
-                          <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full font-bold text-white shadow-md">
-                            {rank + 1}
+                          <div className="relative flex items-center justify-center w-10 h-10 bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-full font-bold text-white shadow-lg">
+                            <span className="relative z-10">{rank + 1}</span>
+                            <div className="absolute inset-0 bg-gradient-to-br from-yellow-500 via-orange-600 to-red-600 rounded-full blur-lg opacity-50" />
                           </div>
-                          <div className="w-20 h-20 relative shrink-0 bg-gray-200 rounded-lg overflow-hidden shadow-md">
+                          <div className="relative w-24 h-24 shrink-0 bg-white/10 rounded-2xl overflow-hidden shadow-xl border border-white/20">
                             {r.image_url ? (
                               <Image
                                 src={`${backendPublic}${r.image_url}`}
@@ -295,23 +373,28 @@ export default function Page() {
                                 className="object-cover"
                               />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                              <div className="w-full h-full flex items-center justify-center text-white/50 text-xs font-medium">
                                 NO IMG
                               </div>
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="font-bold text-gray-900 truncate">{r.name}</div>
-                            <div className="flex items-center gap-2 mt-1">
-                              <div className="flex-1 bg-gray-200 rounded-full h-2 overflow-hidden">
-                                <div
-                                  className="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full"
-                                  style={{ width: `${r.score * 100}%` }}
-                                />
+                            <div className="font-bold text-white text-lg truncate mb-2">{r.name}</div>
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-3">
+                                <div className="flex-1 bg-white/10 rounded-full h-3 overflow-hidden border border-white/20 shadow-inner">
+                                  <div
+                                    className="relative h-3 rounded-full overflow-hidden"
+                                    style={{ width: `${r.score * 100}%` }}
+                                  >
+                                    <div className="absolute inset-0 bg-gradient-to-r from-green-400 via-blue-400 to-purple-500" />
+                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
+                                  </div>
+                                </div>
+                                <span className="text-sm font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent whitespace-nowrap">
+                                  {(r.score * 100).toFixed(1)}%
+                                </span>
                               </div>
-                              <span className="text-sm font-semibold text-blue-600">
-                                {(r.score * 100).toFixed(1)}%
-                              </span>
                             </div>
                           </div>
                         </div>
@@ -326,11 +409,17 @@ export default function Page() {
       </div>
 
       {/* Footer */}
-      <footer className="mt-16 py-8 bg-white border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600">
-          <p>Powered by CLIP AI Model • Actor Match Service</p>
+      <footer className="relative z-10 mt-20 py-8 backdrop-blur-md bg-white/10 border-t border-white/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-purple-200 font-medium">Powered by CLIP AI Model • Actor Match Service</p>
+          <div className="mt-3 flex items-center justify-center gap-2 text-sm text-purple-300">
+            <span>Made with</span>
+            <span className="text-red-400 animate-pulse text-lg">❤️</span>
+            <span>by AI</span>
+          </div>
         </div>
       </footer>
+      </div>
     </main>
   )
 }
