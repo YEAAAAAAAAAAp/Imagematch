@@ -107,318 +107,308 @@ export default function Page() {
 
   return (
     <main className="min-h-screen relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
-        {/* Mesh Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 via-purple-500/20 to-pink-500/20 animate-pulse" />
+      {/* Sophisticated Background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+        {/* Subtle Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-blue-950/30 via-transparent to-purple-950/30" />
         
-        {/* Floating Particles */}
-        {particles.map((particle) => (
+        {/* Minimal Floating Particles */}
+        {particles.slice(0, 8).map((particle) => (
           <div
             key={particle.id}
-            className="absolute rounded-full bg-white/20 backdrop-blur-sm animate-float"
+            className="absolute rounded-full bg-white/5 backdrop-blur-sm animate-float"
             style={{
               left: `${particle.x}%`,
               top: `${particle.y}%`,
-              width: `${particle.size}px`,
-              height: `${particle.size}px`,
+              width: `${particle.size * 1.5}px`,
+              height: `${particle.size * 1.5}px`,
               animationDelay: `${particle.delay}s`,
-              animationDuration: `${15 + Math.random() * 10}s`
+              animationDuration: `${20 + Math.random() * 10}s`
             }}
           />
         ))}
         
-        {/* Radial Gradient Spots */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-pink-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+        {/* Elegant Radial Accents */}
+        <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/3 left-1/3 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-3xl" />
       </div>
 
       {/* Content */}
       <div className="relative z-10">
-        {/* Header */}
-        <header className="backdrop-blur-md bg-white/10 border-b border-white/20 shadow-2xl">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Minimalist Header */}
+        <header className="backdrop-blur-xl bg-slate-900/60 border-b border-slate-800/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-6">
                 <div className="relative">
-                  <span className="text-5xl animate-bounce">🎭</span>
-                  <div className="absolute inset-0 blur-xl bg-purple-500/50 animate-pulse" />
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm border border-white/10 flex items-center justify-center">
+                    <span className="text-3xl">🎭</span>
+                  </div>
                 </div>
                 <div>
-                  <h1 className="text-4xl font-bold text-white flex items-center gap-3">
-                    <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                      Actor Match AI
-                    </span>
+                  <h1 className="text-3xl font-light tracking-tight text-white">
+                    Actor Match <span className="font-semibold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">AI</span>
                   </h1>
-                  <p className="text-purple-200 mt-1 font-medium">AI 기반 배우 유사도 분석 서비스</p>
+                  <p className="text-sm text-slate-400 mt-1">Advanced facial recognition technology</p>
                 </div>
               </div>
               {files.length > 0 && (
                 <button
                   onClick={clearAll}
-                  className="px-6 py-3 text-sm text-white/90 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-xl transition-all border border-white/20 hover:border-white/40 shadow-lg"
+                  className="px-5 py-2.5 text-sm text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-800 backdrop-blur-sm rounded-lg transition-all border border-slate-700/50 hover:border-slate-600"
                 >
-                  전체 초기화
+                  Clear All
                 </button>
               )}
             </div>
           </div>
         </header>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Upload Section */}
-        <section className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl shadow-2xl p-8 mb-8">
-          <form onSubmit={onSubmit} className="space-y-6">
-            {/* Drag & Drop Area */}
-            <div
-              onDrop={onDrop}
-              onDragOver={onDragOver}
-              onDragLeave={onDragLeave}
-              className={`
-                relative border-2 border-dashed rounded-3xl p-12 text-center transition-all duration-300 overflow-hidden
-                ${isDragActive 
-                  ? 'border-white/60 bg-white/20 scale-105 shadow-2xl' 
-                  : 'border-white/30 hover:border-white/50 hover:bg-white/10'
-                }
-              `}
-            >
-              {/* Glow Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-xl" />
-              
-              <div className="relative flex flex-col items-center gap-4">
-                <div className="relative">
-                  <div className="text-7xl animate-bounce">📸</div>
-                  <div className="absolute inset-0 blur-2xl bg-white/30 animate-pulse" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-white mb-2">
-                    {isDragActive ? '여기에 놓으세요!' : '이미지를 드래그하여 업로드'}
-                  </p>
-                  <p className="text-purple-200 mb-4">또는 아래 버튼을 클릭하세요</p>
-                </div>
-                <label className="relative group cursor-pointer">
-                  <div className="px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-bold text-lg shadow-2xl transition-all group-hover:shadow-purple-500/50 group-hover:scale-105">
-                    파일 선택
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          {/* Upload Section */}
+          <section className="backdrop-blur-xl bg-slate-900/40 border border-slate-800/50 rounded-2xl p-10 mb-10">
+            <form onSubmit={onSubmit} className="space-y-8">
+              {/* Minimal Drag & Drop Area */}
+              <div
+                onDrop={onDrop}
+                onDragOver={onDragOver}
+                onDragLeave={onDragLeave}
+                className={`
+                  relative border-2 border-dashed rounded-2xl p-16 text-center transition-all duration-300
+                  ${isDragActive 
+                    ? 'border-blue-500/50 bg-blue-500/5' 
+                    : 'border-slate-700/50 hover:border-slate-600/50 hover:bg-slate-800/30'
+                  }
+                `}
+              >
+                <div className="flex flex-col items-center gap-6">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-sm border border-slate-700/50 flex items-center justify-center">
+                    <svg className="w-10 h-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
                   </div>
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 blur-xl opacity-50 group-hover:opacity-75 transition-opacity" />
-                  <input type="file" accept="image/*" multiple className="hidden" onChange={onInputChange} />
-                </label>
-                {files.length > 0 && (
-                  <div className="mt-2 px-6 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30">
-                    <p className="text-sm font-bold text-white">
-                      ✓ {files.length}개 파일 선택됨
+                  <div>
+                    <p className="text-lg font-light text-white mb-2">
+                      {isDragActive ? 'Drop files here' : 'Upload Images'}
                     </p>
+                    <p className="text-sm text-slate-400">Drag and drop or click to browse</p>
                   </div>
-                )}
+                  <label className="relative group cursor-pointer">
+                    <div className="px-8 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium text-sm transition-all group-hover:shadow-lg group-hover:shadow-blue-500/25">
+                      Select Files
+                    </div>
+                    <input type="file" accept="image/*" multiple className="hidden" onChange={onInputChange} />
+                  </label>
+                  {files.length > 0 && (
+                    <div className="mt-2 px-4 py-2 rounded-lg bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                      <p className="text-xs font-medium text-slate-300">
+                        {files.length} {files.length === 1 ? 'file' : 'files'} selected
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
 
-            {/* Top-K Slider */}
-            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 shadow-xl">
-              <div className="flex items-center justify-between mb-4">
-                <label htmlFor="topk" className="text-lg font-bold text-white flex items-center gap-2">
-                  <span className="text-2xl">🎯</span>
-                  결과 개수 (Top-K)
-                </label>
-                <span className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent px-6 py-2 rounded-xl backdrop-blur-md bg-white/20 border border-white/30 shadow-lg">
-                  {topK}
-                </span>
-              </div>
-              <input
-                id="topk"
-                type="range"
-                min={1}
-                max={10}
-                value={topK}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTopK(parseInt(e.target.value))}
-                className="w-full h-4 bg-white/20 rounded-full appearance-none cursor-pointer slider-thumb"
-              />
-              <div className="flex justify-between text-sm text-purple-200 mt-3 font-medium">
-                <span>1개</span>
-                <span>5개</span>
-                <span>10개</span>
-              </div>
-            </div>
-
-            {/* Progress Bar */}
-            {(loading || progress > 0) && (
-              <div className="space-y-3 backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 shadow-xl">
-                <div className="flex justify-between text-sm text-white font-medium">
-                  <span className="flex items-center gap-2">
-                    {loading && <span className="animate-spin">⚡</span>}
-                    {loading ? 'AI 분석 중...' : '완료!'}
+              {/* Refined Top-K Slider */}
+              <div className="backdrop-blur-sm bg-slate-800/30 border border-slate-700/50 rounded-xl p-6">
+                <div className="flex items-center justify-between mb-5">
+                  <label htmlFor="topk" className="text-sm font-medium text-slate-300 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    Top Results
+                  </label>
+                  <span className="text-2xl font-light text-white px-4 py-1 rounded-lg bg-slate-800/50 border border-slate-700/50 min-w-[60px] text-center">
+                    {topK}
                   </span>
-                  <span className="font-bold">{progress}%</span>
                 </div>
-                <div className="relative w-full bg-white/10 rounded-full h-4 overflow-hidden shadow-inner border border-white/20">
-                  <div
-                    className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 h-4 rounded-full transition-all duration-300 ease-out shadow-lg"
-                    style={{ width: `${progress}%` }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
+                <input
+                  id="topk"
+                  type="range"
+                  min={1}
+                  max={10}
+                  value={topK}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTopK(parseInt(e.target.value))}
+                  className="w-full h-1 bg-slate-700/50 rounded-full appearance-none cursor-pointer slider-thumb"
+                />
+                <div className="flex justify-between text-xs text-slate-500 mt-3">
+                  <span>1</span>
+                  <span>10</span>
                 </div>
+              </div>
+
+              {/* Elegant Progress Bar */}
+              {(loading || progress > 0) && (
+                <div className="space-y-3 backdrop-blur-sm bg-slate-800/30 border border-slate-700/50 rounded-xl p-5">
+                  <div className="flex justify-between text-sm text-slate-300">
+                    <span className="flex items-center gap-2">
+                      {loading && (
+                        <svg className="animate-spin h-4 w-4 text-blue-400" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        </svg>
+                      )}
+                      {loading ? 'Analyzing...' : 'Complete'}
+                    </span>
+                    <span className="font-medium">{progress}%</span>
+                  </div>
+                  <div className="relative w-full bg-slate-800/50 rounded-full h-2 overflow-hidden border border-slate-700/50">
+                    <div
+                      className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300 ease-out"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Professional Submit Button */}
+              <button
+                type="submit"
+                disabled={loading || files.length === 0}
+                className="relative w-full group overflow-hidden rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                <div className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium transition-all group-hover:shadow-xl group-hover:shadow-blue-500/25">
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-3">
+                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      Processing
+                    </span>
+                  ) : (
+                    'Start Analysis'
+                  )}
+                </div>
+              </button>
+            </form>
+
+            {/* Clean Error Message */}
+            {error && (
+              <div className="mt-6 p-4 backdrop-blur-sm bg-red-500/10 border border-red-500/20 rounded-xl">
+                <p className="text-red-300 text-sm flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                  {error}
+                </p>
               </div>
             )}
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading || files.length === 0}
-              className="relative w-full group overflow-hidden rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 blur-xl opacity-75 group-hover:opacity-100 transition-opacity" />
-              <div className="relative px-8 py-5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-bold text-xl shadow-2xl group-hover:shadow-purple-500/50 transition-all">
-                {loading ? (
-                  <span className="flex items-center justify-center gap-3">
-                    <svg className="animate-spin h-6 w-6" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    AI 분석 중...
-                  </span>
-                ) : (
-                  <span className="flex items-center justify-center gap-2">
-                    <span className="text-2xl">🚀</span>
-                    분석 시작
-                  </span>
-                )}
-              </div>
-            </button>
-          </form>
-
-          {/* Error Message */}
-          {error && (
-            <div className="mt-6 p-5 backdrop-blur-md bg-red-500/20 border border-red-400/30 rounded-2xl shadow-xl">
-              <p className="text-red-100 flex items-center gap-3 font-medium">
-                <span className="text-2xl">⚠️</span>
-                {error}
-              </p>
-            </div>
-          )}
-        </section>
-
-        {/* Preview Section */}
-        {previews.length > 0 && (
-          <section className="mb-8">
-            <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
-              <span className="text-4xl">🖼️</span>
-              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                업로드된 이미지
-              </span>
-            </h2>
-            <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-              {previews.map((p, idx) => (
-                <div key={p.name} className="group relative backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-purple-500/30">
-                  <div className="relative w-full aspect-square">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={p.url} alt={p.name} className="object-cover w-full h-full" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                  <button
-                    onClick={() => removeFile(idx)}
-                    className="absolute top-3 right-3 bg-red-500/90 backdrop-blur-md text-white rounded-full w-10 h-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-red-600 hover:scale-110 shadow-lg font-bold text-xl"
-                  >
-                    ×
-                  </button>
-                  <div className="p-3 backdrop-blur-md bg-white/10 border-t border-white/20">
-                    <p className="text-xs text-white/90 truncate font-medium">{p.name}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </section>
-        )}
 
-        {/* Results Section */}
-        {results.length > 0 && (
-          <section>
-            <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
-              <span className="text-4xl">✨</span>
-              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                분석 결과
-              </span>
-            </h2>
-            <div className="grid gap-6 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
-              {results.map((res, i) => (
-                <div key={`res-${i}`} className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-purple-500/30">
-                  <div className="relative bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-5 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <h3 className="relative font-bold text-white text-xl flex items-center gap-3 z-10">
-                      <span className="bg-white text-purple-600 rounded-full w-10 h-10 flex items-center justify-center font-bold shadow-lg">
-                        {i + 1}
-                      </span>
-                      이미지 {i + 1}
-                    </h3>
+          {/* Refined Preview Section */}
+          {previews.length > 0 && (
+            <section className="mb-10">
+              <h2 className="text-xl font-light text-white mb-6 flex items-center gap-3">
+                <svg className="w-6 h-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span className="text-slate-300">Uploaded Images</span>
+              </h2>
+              <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+                {previews.map((p, idx) => (
+                  <div key={p.name} className="group relative backdrop-blur-sm bg-slate-800/30 border border-slate-700/50 rounded-xl overflow-hidden hover:border-slate-600/50 transition-all">
+                    <div className="relative w-full aspect-square">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={p.url} alt={p.name} className="object-cover w-full h-full" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                    <button
+                      onClick={() => removeFile(idx)}
+                      className="absolute top-2 right-2 bg-slate-900/90 backdrop-blur-sm text-white rounded-lg w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500 border border-slate-700/50"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                    <div className="p-2 backdrop-blur-sm bg-slate-900/50 border-t border-slate-700/50">
+                      <p className="text-xs text-slate-400 truncate">{p.name}</p>
+                    </div>
                   </div>
-                  <div className="p-5 space-y-4">
-                    {res.length === 0 ? (
-                      <p className="text-purple-200 text-center py-12 font-medium">매칭된 배우가 없습니다</p>
-                    ) : (
-                      res.map((r, rank) => (
-                        <div
-                          key={`${i}-${r.name}`}
-                          className="group flex items-center gap-4 p-4 backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl hover:bg-white/20 transition-all hover:scale-105 shadow-lg"
-                        >
-                          <div className="relative flex items-center justify-center w-10 h-10 bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-full font-bold text-white shadow-lg">
-                            <span className="relative z-10">{rank + 1}</span>
-                            <div className="absolute inset-0 bg-gradient-to-br from-yellow-500 via-orange-600 to-red-600 rounded-full blur-lg opacity-50" />
-                          </div>
-                          <div className="relative w-24 h-24 shrink-0 bg-white/10 rounded-2xl overflow-hidden shadow-xl border border-white/20">
-                            {r.image_url ? (
-                              <Image
-                                src={`${backendPublic}${r.image_url}`}
-                                alt={r.name}
-                                fill
-                                className="object-cover"
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center text-white/50 text-xs font-medium">
-                                NO IMG
-                              </div>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="font-bold text-white text-lg truncate mb-2">{r.name}</div>
-                            <div className="space-y-2">
-                              <div className="flex items-center gap-3">
-                                <div className="flex-1 bg-white/10 rounded-full h-3 overflow-hidden border border-white/20 shadow-inner">
-                                  <div
-                                    className="relative h-3 rounded-full overflow-hidden"
-                                    style={{ width: `${r.score * 100}%` }}
-                                  >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-green-400 via-blue-400 to-purple-500" />
-                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
-                                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Professional Results Section */}
+          {results.length > 0 && (
+            <section>
+              <h2 className="text-xl font-light text-white mb-6 flex items-center gap-3">
+                <svg className="w-6 h-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+                <span className="text-slate-300">Analysis Results</span>
+              </h2>
+              <div className="grid gap-6 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+                {results.map((res, i) => (
+                  <div key={`res-${i}`} className="backdrop-blur-sm bg-slate-900/40 border border-slate-800/50 rounded-xl overflow-hidden hover:border-slate-700/50 transition-all">
+                    <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border-b border-slate-800/50 p-4">
+                      <h3 className="font-medium text-white text-sm flex items-center gap-2">
+                        <span className="w-7 h-7 bg-slate-800/50 border border-slate-700/50 rounded-lg flex items-center justify-center text-xs font-semibold">
+                          {i + 1}
+                        </span>
+                        Image {i + 1}
+                      </h3>
+                    </div>
+                    <div className="p-4 space-y-3">
+                      {res.length === 0 ? (
+                        <p className="text-slate-400 text-center py-8 text-sm">No matches found</p>
+                      ) : (
+                        res.map((r, rank) => (
+                          <div
+                            key={`${i}-${r.name}`}
+                            className="flex items-center gap-4 p-3 backdrop-blur-sm bg-slate-800/30 border border-slate-700/50 rounded-lg hover:bg-slate-800/50 transition-all"
+                          >
+                            <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-slate-700/50 rounded-lg text-white text-sm font-medium">
+                              {rank + 1}
+                            </div>
+                            <div className="relative w-16 h-16 shrink-0 bg-slate-800/50 rounded-lg overflow-hidden border border-slate-700/50">
+                              {r.image_url ? (
+                                <Image
+                                  src={`${backendPublic}${r.image_url}`}
+                                  alt={r.name}
+                                  fill
+                                  className="object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-slate-500 text-xs">
+                                  N/A
                                 </div>
-                                <span className="text-sm font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent whitespace-nowrap">
-                                  {(r.score * 100).toFixed(1)}%
-                                </span>
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="font-medium text-white text-sm truncate mb-1.5">{r.name}</div>
+                              <div className="space-y-1.5">
+                                <div className="flex items-center gap-2">
+                                  <div className="flex-1 bg-slate-800/50 rounded-full h-1.5 overflow-hidden border border-slate-700/50">
+                                    <div
+                                      className="h-1.5 rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
+                                      style={{ width: `${r.score * 100}%` }}
+                                    />
+                                  </div>
+                                  <span className="text-xs font-medium text-slate-300 whitespace-nowrap w-12 text-right">
+                                    {(r.score * 100).toFixed(1)}%
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))
-                    )}
+                        ))
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-      </div>
-
-      {/* Footer */}
-      <footer className="relative z-10 mt-20 py-8 backdrop-blur-md bg-white/10 border-t border-white/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-purple-200 font-medium">Powered by CLIP AI Model • Actor Match Service</p>
-          <div className="mt-3 flex items-center justify-center gap-2 text-sm text-purple-300">
-            <span>Made with</span>
-            <span className="text-red-400 animate-pulse text-lg">❤️</span>
-            <span>by AI</span>
-          </div>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
-      </footer>
+
+        {/* Minimalist Footer */}
+        <footer className="relative z-10 mt-20 py-6 backdrop-blur-xl bg-slate-900/60 border-t border-slate-800/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p className="text-sm text-slate-400">Powered by <span className="text-slate-300">CLIP AI</span> • Actor Match Service</p>
+          </div>
+        </footer>
       </div>
     </main>
   )
