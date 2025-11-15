@@ -25,6 +25,7 @@ export default function Page() {
   const [showGuide, setShowGuide] = useState(true)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [totalAnalyzed, setTotalAnalyzed] = useState(0)
+  const [targetActor, setTargetActor] = useState<string>('')
 
   const backendPublic = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'
 
@@ -114,69 +115,76 @@ export default function Page() {
 
   return (
     <main className="min-h-screen relative overflow-hidden">
-      {/* Premium Background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-        {/* Sophisticated Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-blue-950/40 via-transparent to-purple-950/40" />
+      {/* Genie Magic Background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-purple-950 via-indigo-950 to-violet-950">
+        {/* Mystical Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-fuchsia-900/40 via-transparent to-purple-900/40" />
         
-        {/* Premium Floating Particles */}
-        {particles.slice(0, 8).map((particle) => (
+        {/* Magical Floating Stars */}
+        {particles.map((particle) => (
           <div
             key={particle.id}
-            className="absolute rounded-full bg-gradient-to-br from-blue-400/10 to-purple-400/10 backdrop-blur-sm animate-float"
+            className="absolute rounded-full bg-gradient-to-br from-yellow-200/20 to-pink-400/20 backdrop-blur-sm animate-float"
             style={{
               left: `${particle.x}%`,
               top: `${particle.y}%`,
               width: `${particle.size * 2}px`,
               height: `${particle.size * 2}px`,
               animationDelay: `${particle.delay}s`,
-              animationDuration: `${20 + Math.random() * 10}s`,
-              boxShadow: '0 0 20px rgba(59, 130, 246, 0.1)'
+              animationDuration: `${15 + Math.random() * 10}s`,
+              boxShadow: '0 0 25px rgba(251, 191, 36, 0.3)'
             }}
           />
         ))}
         
-        {/* Elegant Radial Accents with Animation */}
-        <div className="absolute top-1/4 right-1/4 w-[700px] h-[700px] bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }} />
-        <div className="absolute bottom-1/3 left-1/3 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }} />
+        {/* Genie Magical Auras */}
+        <div className="absolute top-1/4 right-1/4 w-[700px] h-[700px] bg-fuchsia-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '6s' }} />
+        <div className="absolute bottom-1/3 left-1/3 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }} />
+        <div className="absolute top-1/2 left-1/2 w-[500px] h-[500px] bg-amber-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }} />
         
-        {/* Subtle Grid Pattern */}
-        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.02) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+        {/* Magical Sparkle Pattern */}
+        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(251, 191, 36, 0.05) 1px, transparent 0)', backgroundSize: '50px 50px' }} />
       </div>
 
       {/* Content */}
       <div className="relative z-10">
-        {/* Professional Navigation Bar */}
-        <nav className="backdrop-blur-2xl bg-slate-900/80 border-b border-slate-700/30 shadow-2xl shadow-black/20 sticky top-0 z-50">
+        {/* Magical Genie Navigation Bar */}
+        <nav className="backdrop-blur-2xl bg-purple-900/80 border-b border-fuchsia-700/30 shadow-2xl shadow-purple-500/20 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-20">
-              {/* Logo & Brand */}
+              {/* Magic Lamp Logo & Brand */}
               <div className="flex items-center gap-4">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity" />
-                  <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500/30 to-purple-500/30 backdrop-blur-xl border border-white/20 flex items-center justify-center shadow-xl">
-                    <span className="text-2xl">🎭</span>
+                  <div className="absolute inset-0 bg-gradient-to-br from-amber-400 via-fuchsia-500 to-purple-600 rounded-2xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative w-12 h-12 rounded-2xl overflow-hidden backdrop-blur-xl border border-amber-300/30 shadow-xl">
+                    <Image
+                      src="/Genie-clean.png"
+                      alt="Genie Logo"
+                      fill
+                      className="object-contain p-1"
+                      priority
+                    />
                   </div>
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-white">
-                    Actor Match <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">AI</span>
+                    Genie <span className="bg-gradient-to-r from-amber-300 via-fuchsia-400 to-purple-400 bg-clip-text text-transparent">Match</span>
                   </h1>
-                  <p className="text-xs text-slate-400 flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
-                    얼굴 인식 서비스
+                  <p className="text-xs text-purple-300 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse" />
+                    ✨ 마법의 배우 찾기
                   </p>
                 </div>
               </div>
 
               {/* Navigation Links */}
               <div className="hidden md:flex items-center gap-2">
-                <button className="px-4 py-2 text-sm font-medium text-white bg-slate-800/50 rounded-xl hover:bg-slate-800 transition-all">
+                <button className="px-4 py-2 text-sm font-medium text-white bg-purple-800/50 rounded-xl hover:bg-purple-700 transition-all shadow-lg shadow-purple-500/20">
                   대시보드
                 </button>
                 <button 
                   onClick={() => setShowGuide(!showGuide)}
-                  className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all"
+                  className="px-4 py-2 text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-800/50 rounded-xl transition-all"
                 >
                   사용 가이드
                 </button>
@@ -184,12 +192,12 @@ export default function Page() {
 
               {/* Stats Badge */}
               {totalAnalyzed > 0 && (
-                <div className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20">
-                  <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-400/20 to-fuchsia-500/20 border border-amber-400/30">
+                  <svg className="w-4 h-4 text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
-                  <span className="text-xs font-semibold text-slate-300">
-                    {totalAnalyzed}개 분석 완료
+                  <span className="text-xs font-semibold text-amber-200">
+                    ✨ {totalAnalyzed}개 소원 완료
                   </span>
                 </div>
               )}
@@ -256,34 +264,57 @@ export default function Page() {
           </div>
         )}
 
-        {/* Luxurious Header */}
-        <header className="backdrop-blur-2xl bg-slate-900/70 border-b border-slate-700/30 shadow-2xl shadow-black/20">
+        {/* Magical Genie Header */}
+        <header className="backdrop-blur-2xl bg-purple-900/70 border-b border-fuchsia-700/30 shadow-2xl shadow-purple-500/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              {/* Hero Section */}
-              <div className="text-center md:text-left">
-                <h2 className="text-3xl md:text-4xl font-light tracking-tight text-white mb-2">
-                  유사 <span className="font-bold bg-gradient-to-r from-blue-400 via-blue-300 to-purple-400 bg-clip-text text-transparent">배우</span> 찾기
-                </h2>
-                <p className="text-sm text-slate-400">이미지를 업로드하고 첨단 AI 기술로 유사한 배우를 찾아보세요</p>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+              {/* Hero Section with Genie Image */}
+              <div className="flex items-center gap-6">
+                {/* Animated Genie Image */}
+                <div className="relative group hidden md:block">
+                  <div className="absolute inset-0 bg-gradient-to-br from-amber-400 via-fuchsia-500 to-purple-600 rounded-full blur-3xl opacity-30 group-hover:opacity-50 transition-opacity duration-500 animate-pulse" />
+                  <div className="relative w-40 h-40 transform group-hover:scale-110 transition-all duration-500">
+                    <Image
+                      src="/Genie-clean.png"
+                      alt="Genie Magic"
+                      fill
+                      className="object-contain"
+                      priority
+                      style={{ 
+                        filter: 'drop-shadow(0 10px 30px rgba(251, 191, 36, 0.6)) drop-shadow(0 0 50px rgba(217, 70, 239, 0.4))',
+                        imageRendering: 'crisp-edges'
+                      }}
+                    />
+                  </div>
+                  {/* Magical sparkle effects */}
+                  <div className="absolute top-0 right-0 w-3 h-3 bg-amber-300 rounded-full animate-ping opacity-75" />
+                  <div className="absolute top-8 -right-2 w-2 h-2 bg-yellow-200 rounded-full animate-pulse" />
+                  <div className="absolute bottom-4 -left-2 w-3 h-3 bg-fuchsia-400 rounded-full animate-bounce opacity-70" style={{ animationDuration: '2s' }} />
+                  <div className="absolute -bottom-2 right-8 w-2 h-2 bg-purple-300 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
+                </div>
+                
+                <div className="text-center md:text-left">
+                  <h2 className="text-3xl md:text-4xl font-light tracking-tight text-white mb-2">
+                    마법처럼 찾는 <span className="font-bold bg-gradient-to-r from-amber-300 via-fuchsia-400 to-purple-400 bg-clip-text text-transparent">닮은꼴 배우</span> ✨
+                  </h2>
+                  <p className="text-sm text-purple-300">🪔 지니의 마법으로 이미지 속 닮은 배우를 찾아드립니다</p>
+                </div>
               </div>
 
-              {/* Database Stats */}
+              {/* Magical Database Stats */}
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-3 px-6 py-3 backdrop-blur-xl bg-slate-800/40 border border-slate-700/40 rounded-xl">
+                <div className="flex items-center gap-3 px-6 py-3 backdrop-blur-xl bg-purple-800/40 border border-fuchsia-700/40 rounded-xl shadow-lg shadow-amber-400/10">
                   <div className="relative">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
-                      <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                      </svg>
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400/30 to-fuchsia-500/30 flex items-center justify-center">
+                      <span className="text-xl">⭐</span>
                     </div>
-                    <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse border-2 border-slate-800" />
+                    <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-amber-400 rounded-full animate-pulse border-2 border-purple-900" />
                   </div>
                   <div>
-                    <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                    <div className="text-2xl font-bold bg-gradient-to-r from-amber-300 via-fuchsia-400 to-purple-400 bg-clip-text text-transparent">
                       100,000+
                     </div>
-                    <div className="text-xs text-slate-400 mt-0.5 font-medium">배우 이미지 데이터</div>
+                    <div className="text-xs text-purple-300 mt-0.5 font-medium">마법의 배우 데이터</div>
                   </div>
                 </div>
                 {files.length > 0 && (
@@ -302,80 +333,97 @@ export default function Page() {
         </header>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          {/* Feature Cards Row */}
+          {/* Magical Feature Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div className="backdrop-blur-xl bg-slate-800/30 border border-slate-700/40 rounded-2xl p-5 hover:border-slate-600/60 transition-all">
+            <div className="backdrop-blur-xl bg-purple-800/30 border border-fuchsia-700/40 rounded-2xl p-5 hover:border-amber-400/60 transition-all hover:shadow-lg hover:shadow-amber-400/20">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                  <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
+                <div className="w-10 h-10 rounded-xl bg-amber-400/20 flex items-center justify-center">
+                  <span className="text-xl">⚡</span>
                 </div>
-                <h3 className="font-semibold text-white">빠른 처리</h3>
+                <h3 className="font-semibold text-white">초고속 마법</h3>
               </div>
-              <p className="text-sm text-slate-400">최적화된 AI 엔진으로 몇 초만에 이미지를 분석합니다</p>
+              <p className="text-sm text-purple-300">지니의 마법처럼 빠르게 분석합니다</p>
             </div>
 
-            <div className="backdrop-blur-xl bg-slate-800/30 border border-slate-700/40 rounded-2xl p-5 hover:border-slate-600/60 transition-all">
+            <div className="backdrop-blur-xl bg-purple-800/30 border border-fuchsia-700/40 rounded-2xl p-5 hover:border-fuchsia-400/60 transition-all hover:shadow-lg hover:shadow-fuchsia-400/20">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
-                  <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
+                <div className="w-10 h-10 rounded-xl bg-fuchsia-500/20 flex items-center justify-center">
+                  <span className="text-xl">🔮</span>
                 </div>
                 <h3 className="font-semibold text-white">안전한 보안</h3>
               </div>
-              <p className="text-sm text-slate-400">이미지는 안전하게 처리되며 저장되지 않습니다</p>
+              <p className="text-sm text-purple-300">이미지는 안전하게 처리되며 저장되지 않습니다</p>
             </div>
 
-            <div className="backdrop-blur-xl bg-slate-800/30 border border-slate-700/40 rounded-2xl p-5 hover:border-slate-600/60 transition-all">
+            <div className="backdrop-blur-xl bg-purple-800/30 border border-fuchsia-700/40 rounded-2xl p-5 hover:border-purple-400/60 transition-all hover:shadow-lg hover:shadow-purple-400/20">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-xl bg-pink-500/20 flex items-center justify-center">
-                  <svg className="w-5 h-5 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
+                <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                  <span className="text-xl">✨</span>
                 </div>
                 <h3 className="font-semibold text-white">높은 정확도</h3>
               </div>
-              <p className="text-sm text-slate-400">최첨단 CLIP 모델 기술로 구동됩니다</p>
+              <p className="text-sm text-purple-300">최첨단 AI 모델로 마법같은 결과를 제공합니다</p>
             </div>
           </div>
 
-          {/* Upload Section */}
-          <section className="backdrop-blur-2xl bg-slate-900/50 border border-slate-700/30 rounded-3xl p-12 mb-12 shadow-2xl shadow-black/20">
+          {/* Target Actor Input Section */}
+          <div className="backdrop-blur-xl bg-gradient-to-r from-purple-900/60 to-indigo-900/60 border border-amber-400/30 rounded-2xl p-8 mb-8 shadow-xl shadow-amber-400/10">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-amber-400/20 flex items-center justify-center flex-shrink-0">
+                <span className="text-2xl">🎭</span>
+              </div>
+              <div className="flex-1">
+                <label htmlFor="targetActor" className="block text-lg font-semibold text-white mb-2">
+                  목표 배우 입력 ✨
+                </label>
+                <p className="text-sm text-purple-300 mb-4">
+                  시나리오에 생각한 유명 배우의 이름을 입력하세요 (예: 송강호, 전지현, 이정재)
+                </p>
+                <input
+                  id="targetActor"
+                  type="text"
+                  value={targetActor}
+                  onChange={(e) => setTargetActor(e.target.value)}
+                  placeholder="유명 배우 이름을 입력하세요..."
+                  className="w-full px-6 py-4 bg-purple-800/40 backdrop-blur-xl border border-fuchsia-600/40 rounded-xl text-white placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400/60 transition-all shadow-inner"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Magical Genie Upload Section */}
+          <section className="backdrop-blur-2xl bg-purple-900/50 border border-fuchsia-700/30 rounded-3xl p-12 mb-12 shadow-2xl shadow-purple-500/20">
             <form onSubmit={onSubmit} className="space-y-10">
-              {/* Premium Drag & Drop Area */}
+              {/* Magical Drag & Drop Area */}
               <div
                 onDrop={onDrop}
                 onDragOver={onDragOver}
                 onDragLeave={onDragLeave}
                 className={`
                   relative border-2 border-dashed rounded-3xl p-20 text-center transition-all duration-500
-                  ${isDragActive 
-                    ? 'border-blue-400/60 bg-blue-500/10 scale-[1.02] shadow-2xl shadow-blue-500/20' 
-                    : 'border-slate-600/40 hover:border-slate-500/60 hover:bg-slate-800/40 hover:shadow-xl hover:shadow-black/10'
+                  ${ isDragActive 
+                    ? 'border-amber-400/60 bg-fuchsia-500/10 scale-[1.02] shadow-2xl shadow-amber-400/20' 
+                    : 'border-fuchsia-600/40 hover:border-amber-400/60 hover:bg-purple-800/40 hover:shadow-xl hover:shadow-amber-400/10'
                   }
                 `}
               >
                 <div className="flex flex-col items-center gap-8">
                   <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-500 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500" />
-                    <div className="relative w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-xl border border-slate-600/50 flex items-center justify-center shadow-2xl transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                      <svg className="w-12 h-12 text-slate-300 group-hover:text-white transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                      </svg>
+                    <div className="absolute inset-0 bg-gradient-to-br from-amber-400 via-fuchsia-500 to-purple-600 rounded-3xl blur-2xl opacity-30 group-hover:opacity-60 transition-opacity duration-500" />
+                    <div className="relative w-24 h-24 rounded-3xl bg-gradient-to-br from-amber-400/20 via-fuchsia-500/20 to-purple-600/20 backdrop-blur-xl border border-amber-400/50 flex items-center justify-center shadow-2xl transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                      <span className="text-5xl">🪔</span>
                     </div>
                   </div>
                   <div>
                     <p className="text-2xl font-light text-white mb-3">
-                      {isDragActive ? '여기에 파일을 놓으세요' : '이미지 업로드'}
+                      {isDragActive ? '✨ 여기에 파일을 놓으세요' : '💫 마법의 이미지 업로드'}
                     </p>
-                    <p className="text-sm text-slate-400">드래그 앤 드롭 또는 클릭하여 선택 • JPG, PNG, WEBP 지원</p>
+                    <p className="text-sm text-purple-300">드래그 앤 드롭 또는 클릭하여 선택 • JPG, PNG, WEBP 지원</p>
                   </div>
                   <label className="relative group cursor-pointer">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity duration-300" />
-                    <div className="relative px-10 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold text-sm transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-blue-500/40 group-hover:scale-105 transform">
-                      파일 선택
+                    <div className="absolute inset-0 bg-gradient-to-r from-amber-400 via-fuchsia-500 to-purple-600 rounded-xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="relative px-10 py-4 rounded-xl bg-gradient-to-r from-amber-400 via-fuchsia-500 to-purple-600 text-white font-semibold text-sm transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-amber-400/40 group-hover:scale-105 transform">
+                      ✨ 파일 선택
                     </div>
                     <input type="file" accept="image/*" multiple className="hidden" onChange={onInputChange} />
                   </label>
@@ -392,29 +440,27 @@ export default function Page() {
                 </div>
               </div>
 
-              {/* Luxurious Top-K Slider */}
-              <div className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 to-slate-700/40 border border-slate-600/50 rounded-2xl p-8 shadow-xl">
+              {/* Magical Wish Counter Slider */}
+              <div className="backdrop-blur-xl bg-gradient-to-br from-purple-800/40 to-fuchsia-800/40 border border-amber-400/50 rounded-2xl p-8 shadow-xl shadow-amber-400/10">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm border border-slate-600/50 flex items-center justify-center">
-                      <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                      </svg>
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400/30 to-fuchsia-500/30 backdrop-blur-sm border border-amber-400/50 flex items-center justify-center">
+                      <span className="text-xl">⭐</span>
                     </div>
-                    <label htmlFor="topk" className="text-base font-medium text-slate-200">
-                      결과 개수
+                    <label htmlFor="topk" className="text-base font-medium text-purple-200">
+                      소원 개수 ✨
                     </label>
                     {/* Tooltip */}
                     <div className="group relative">
-                      <svg className="w-4 h-4 text-slate-500 cursor-help" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-4 h-4 text-purple-400 cursor-help" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      <div className="hidden group-hover:block absolute left-0 top-6 w-48 p-2 bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-10">
-                        <p className="text-xs text-slate-300">업로드된 각 이미지에 대해 표시할 유사 배우의 수를 선택하세요</p>
+                      <div className="hidden group-hover:block absolute left-0 top-6 w-48 p-2 bg-purple-900 border border-fuchsia-700 rounded-lg shadow-xl z-10">
+                        <p className="text-xs text-purple-300">업로드된 각 이미지에 대해 표시할 유사 배우의 수를 선택하세요</p>
                       </div>
                     </div>
                   </div>
-                  <span className="text-3xl font-semibold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent px-6 py-2 rounded-xl bg-slate-800/60 border border-slate-600/50 min-w-[70px] text-center shadow-lg">
+                  <span className="text-3xl font-semibold bg-gradient-to-r from-amber-300 via-fuchsia-400 to-purple-400 bg-clip-text text-transparent px-6 py-2 rounded-xl bg-purple-900/60 border border-amber-400/50 min-w-[70px] text-center shadow-lg">
                     {topK}
                   </span>
                 </div>
@@ -425,33 +471,33 @@ export default function Page() {
                   max={10}
                   value={topK}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTopK(parseInt(e.target.value))}
-                  className="w-full h-2 bg-slate-700/50 rounded-full appearance-none cursor-pointer slider-thumb"
+                  className="w-full h-2 bg-purple-700/50 rounded-full appearance-none cursor-pointer slider-thumb"
                 />
-                <div className="relative flex justify-between text-xs text-slate-500 mt-4 font-medium px-1">
+                <div className="relative flex justify-between text-xs text-purple-400 mt-4 font-medium px-1">
                   <span className="absolute left-0">1</span>
                   <span className="absolute left-1/2 -translate-x-1/2">5</span>
                   <span className="absolute right-0">10</span>
                 </div>
               </div>
 
-              {/* Premium Progress Bar */}
+              {/* Magical Progress Bar */}
               {(loading || progress > 0) && (
-                <div className="space-y-4 backdrop-blur-xl bg-gradient-to-br from-slate-800/40 to-slate-700/40 border border-slate-600/50 rounded-2xl p-6 shadow-xl">
-                  <div className="flex justify-between text-sm text-slate-200">
+                <div className="space-y-4 backdrop-blur-xl bg-gradient-to-br from-purple-800/40 to-fuchsia-800/40 border border-amber-400/50 rounded-2xl p-6 shadow-xl shadow-amber-400/10">
+                  <div className="flex justify-between text-sm text-purple-200">
                     <span className="flex items-center gap-3">
                       {loading && (
-                        <svg className="animate-spin h-5 w-5 text-blue-400" viewBox="0 0 24 24">
+                        <svg className="animate-spin h-5 w-5 text-amber-400" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                         </svg>
                       )}
-                      <span className="font-medium">{loading ? '이미지 분석 중...' : '완료'}</span>
+                      <span className="font-medium">{loading ? '✨ 마법 분석 중...' : '✨ 완료'}</span>
                     </span>
-                    <span className="font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">{progress}%</span>
+                    <span className="font-bold bg-gradient-to-r from-amber-300 to-fuchsia-400 bg-clip-text text-transparent">{progress}%</span>
                   </div>
-                  <div className="relative w-full bg-slate-800/60 rounded-full h-3 overflow-hidden border border-slate-700/50 shadow-inner">
+                  <div className="relative w-full bg-purple-900/60 rounded-full h-3 overflow-hidden border border-amber-400/50 shadow-inner">
                     <div
-                      className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-400 to-purple-500 h-3 rounded-full transition-all duration-500 ease-out shadow-lg shadow-blue-500/50"
+                      className="absolute inset-0 bg-gradient-to-r from-amber-400 via-fuchsia-500 to-purple-600 h-3 rounded-full transition-all duration-500 ease-out shadow-lg shadow-amber-400/50"
                       style={{ width: `${progress}%` }}
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
@@ -460,28 +506,26 @@ export default function Page() {
                 </div>
               )}
 
-              {/* Luxurious Submit Button */}
+              {/* Magical Genie Submit Button */}
               <button
                 type="submit"
                 disabled={loading || files.length === 0}
                 className="relative w-full group overflow-hidden rounded-2xl transition-all duration-500 disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-400 to-purple-500 blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="relative px-10 py-5 bg-gradient-to-r from-blue-500 via-blue-400 to-purple-500 text-white font-bold text-base transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-blue-500/50 group-hover:scale-[1.02] transform">
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-400 via-fuchsia-500 to-purple-600 blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative px-10 py-5 bg-gradient-to-r from-amber-400 via-fuchsia-500 to-purple-600 text-white font-bold text-base transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-amber-400/50 group-hover:scale-[1.02] transform">
                   {loading ? (
                     <span className="flex items-center justify-center gap-3">
                       <svg className="animate-spin h-6 w-6" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                       </svg>
-                      분석 진행 중
+                      ✨ 마법 분석 중...
                     </span>
                   ) : (
                     <span className="flex items-center justify-center gap-2">
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                      AI 분석 시작
+                      <span className="text-xl">🪔</span>
+                      지니의 마법 시작 ✨
                     </span>
                   )}
                 </div>
@@ -552,7 +596,17 @@ export default function Page() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                     </svg>
                   </div>
-                  <span className="text-slate-200">분석 결과</span>
+                  <span className="text-slate-200">
+                    {targetActor ? (
+                      <span>
+                        <span className="text-amber-300 font-semibold">&apos;{targetActor}&apos;</span>
+                        <span className="text-slate-400 mx-2">님과 닮은</span>
+                        <span className="text-fuchsia-300">지원 배우</span>
+                      </span>
+                    ) : (
+                      '분석 결과'
+                    )}
+                  </span>
                 </h2>
                 <div className="flex items-center gap-3">
                   <span className="px-4 py-2 rounded-xl bg-gradient-to-r from-green-500/20 to-emerald-500/20 backdrop-blur-xl border border-green-500/30 text-sm font-medium text-green-300">
@@ -647,42 +701,166 @@ export default function Page() {
           )}
         </div>
 
-        {/* Professional Footer */}
-        <footer className="relative z-10 mt-24 backdrop-blur-2xl bg-slate-900/80 border-t border-slate-700/30 shadow-2xl shadow-black/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 mb-8">
+        {/* Magical Genie Footer */}
+        <footer className="relative z-10 mt-24 backdrop-blur-2xl bg-purple-900/80 border-t border-fuchsia-700/30 shadow-2xl shadow-purple-500/20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
               {/* Brand Section */}
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm border border-slate-600/50 flex items-center justify-center">
-                    <span className="text-xl">🎭</span>
+              <div className="md:col-span-1">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="relative w-12 h-12">
+                    <Image
+                      src="/Genie-clean.png"
+                      alt="Genie Logo"
+                      fill
+                      className="object-contain"
+                    />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-white">Actor Match AI</h3>
-                    <p className="text-xs text-slate-400">Professional Edition</p>
+                    <h3 className="text-lg font-bold text-white">Genie Match</h3>
+                    <p className="text-xs text-purple-300">AI Casting Solution</p>
                   </div>
                 </div>
-                <p className="text-sm text-slate-400 mb-4 max-w-2xl mx-auto">
-                  Advanced facial recognition service powered by state-of-the-art CLIP AI technology. 
-                  Find similar actors instantly with our cutting-edge machine learning algorithms.
+                <p className="text-sm text-purple-300 leading-relaxed mb-4">
+                  지니의 마법으로 구동되는 AI 기반 배우 매칭 서비스
                 </p>
-                <div className="flex items-center justify-center gap-2 text-xs text-slate-500">
+                <div className="flex items-center gap-2 text-xs text-purple-400">
                   <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
-                  <span>All systems operational</span>
+                  <span>서비스 정상 운영중</span>
+                </div>
+              </div>
+
+              {/* Product Links */}
+              <div>
+                <h4 className="text-white font-semibold mb-4 text-sm">서비스</h4>
+                <ul className="space-y-3">
+                  <li>
+                    <a href="#" className="text-sm text-purple-300 hover:text-white transition-colors flex items-center gap-2 group">
+                      <span className="w-1 h-1 bg-fuchsia-400 rounded-full group-hover:w-2 transition-all" />
+                      배우 매칭
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-sm text-purple-300 hover:text-white transition-colors flex items-center gap-2 group">
+                      <span className="w-1 h-1 bg-fuchsia-400 rounded-full group-hover:w-2 transition-all" />
+                      캐스팅 지원
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-sm text-purple-300 hover:text-white transition-colors flex items-center gap-2 group">
+                      <span className="w-1 h-1 bg-fuchsia-400 rounded-full group-hover:w-2 transition-all" />
+                      API 문서
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-sm text-purple-300 hover:text-white transition-colors flex items-center gap-2 group">
+                      <span className="w-1 h-1 bg-fuchsia-400 rounded-full group-hover:w-2 transition-all" />
+                      요금제
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Company Links */}
+              <div>
+                <h4 className="text-white font-semibold mb-4 text-sm">회사</h4>
+                <ul className="space-y-3">
+                  <li>
+                    <a href="#" className="text-sm text-purple-300 hover:text-white transition-colors flex items-center gap-2 group">
+                      <span className="w-1 h-1 bg-fuchsia-400 rounded-full group-hover:w-2 transition-all" />
+                      소개
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-sm text-purple-300 hover:text-white transition-colors flex items-center gap-2 group">
+                      <span className="w-1 h-1 bg-fuchsia-400 rounded-full group-hover:w-2 transition-all" />
+                      블로그
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-sm text-purple-300 hover:text-white transition-colors flex items-center gap-2 group">
+                      <span className="w-1 h-1 bg-fuchsia-400 rounded-full group-hover:w-2 transition-all" />
+                      채용
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-sm text-purple-300 hover:text-white transition-colors flex items-center gap-2 group">
+                      <span className="w-1 h-1 bg-fuchsia-400 rounded-full group-hover:w-2 transition-all" />
+                      파트너십
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Contact Section */}
+              <div>
+                <h4 className="text-white font-semibold mb-4 text-sm">문의</h4>
+                <ul className="space-y-3">
+                  <li>
+                    <a href="mailto:disco922@naver.com" className="text-sm text-purple-300 hover:text-white transition-colors flex items-center gap-2 group">
+                      <svg className="w-4 h-4 text-fuchsia-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                      disco922@naver.com
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-sm text-purple-300 hover:text-white transition-colors flex items-center gap-2 group">
+                      <svg className="w-4 h-4 text-fuchsia-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      고객 지원
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-sm text-purple-300 hover:text-white transition-colors flex items-center gap-2 group">
+                      <svg className="w-4 h-4 text-fuchsia-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      FAQ
+                    </a>
+                  </li>
+                </ul>
+                
+                {/* Social Links */}
+                <div className="mt-6">
+                  <h4 className="text-white font-semibold mb-3 text-sm">소셜 미디어</h4>
+                  <div className="flex items-center gap-3">
+                    <a href="#" className="w-9 h-9 rounded-lg bg-purple-800/40 hover:bg-purple-700/60 border border-fuchsia-600/30 hover:border-fuchsia-500/50 flex items-center justify-center text-purple-300 hover:text-white transition-all group">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                      </svg>
+                    </a>
+                    <a href="#" className="w-9 h-9 rounded-lg bg-purple-800/40 hover:bg-purple-700/60 border border-fuchsia-600/30 hover:border-fuchsia-500/50 flex items-center justify-center text-purple-300 hover:text-white transition-all group">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                      </svg>
+                    </a>
+                    <a href="#" className="w-9 h-9 rounded-lg bg-purple-800/40 hover:bg-purple-700/60 border border-fuchsia-600/30 hover:border-fuchsia-500/50 flex items-center justify-center text-purple-300 hover:text-white transition-all group">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                      </svg>
+                    </a>
+                    <a href="#" className="w-9 h-9 rounded-lg bg-purple-800/40 hover:bg-purple-700/60 border border-fuchsia-600/30 hover:border-fuchsia-500/50 flex items-center justify-center text-purple-300 hover:text-white transition-all group">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                      </svg>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Bottom Bar */}
-            <div className="pt-8 border-t border-slate-700/30">
+            <div className="pt-8 border-t border-fuchsia-700/30">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                <p className="text-sm text-slate-500">
-                  © 2025 Actor Match AI. All rights reserved.
+                <p className="text-sm text-purple-400">
+                  © 2025 Genie Match AI. All rights reserved.
                 </p>
-                <div className="flex items-center gap-6 text-sm text-slate-500">
-                  <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-                  <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-                  <a href="#" className="hover:text-white transition-colors">Contact</a>
+                <div className="flex items-center gap-6 text-sm">
+                  <a href="#" className="text-purple-400 hover:text-white transition-colors">개인정보처리방침</a>
+                  <a href="#" className="text-purple-400 hover:text-white transition-colors">이용약관</a>
+                  <a href="#" className="text-purple-400 hover:text-white transition-colors">쿠키 정책</a>
                 </div>
               </div>
             </div>
