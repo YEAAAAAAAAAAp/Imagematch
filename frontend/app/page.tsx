@@ -7,6 +7,7 @@ type MatchResult = {
   name: string
   score: number
   image_url?: string | null
+  is_reference?: boolean
 }
 
 type MatchResponse = {
@@ -50,6 +51,12 @@ export default function Page() {
     const form = new FormData()
     files.forEach((f: File) => form.append('files', f))
     const qs = new URLSearchParams({ top_k: String(topK) })
+    
+    // 레퍼런스 배우가 입력된 경우 쿼리에 추가
+    if (targetActor.trim()) {
+      qs.append('reference_actor', targetActor.trim())
+    }
+    
     setLoading(true)
     setProgress(0)
     
@@ -370,23 +377,31 @@ export default function Page() {
           <div className="backdrop-blur-xl bg-gradient-to-r from-purple-900/60 to-indigo-900/60 border border-amber-400/30 rounded-2xl p-8 mb-8 shadow-xl shadow-amber-400/10">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-xl bg-amber-400/20 flex items-center justify-center flex-shrink-0">
-                <span className="text-2xl">🎭</span>
+                <span className="text-2xl">🎯</span>
               </div>
               <div className="flex-1">
                 <label htmlFor="targetActor" className="block text-lg font-semibold text-white mb-2">
-                  목표 배우 입력 ✨
+                  1️⃣ 레퍼런스 배우 입력 ✨
                 </label>
                 <p className="text-sm text-purple-300 mb-4">
-                  시나리오에 생각한 유명 배우의 이름을 입력하세요 (예: 송강호, 전지현, 이정재)
+                  시나리오에 떠올린 배우 이름이나 느낌을 입력하세요 (예: 송강호, 전지현, 마동석)
                 </p>
                 <input
                   id="targetActor"
                   type="text"
                   value={targetActor}
                   onChange={(e) => setTargetActor(e.target.value)}
-                  placeholder="유명 배우 이름을 입력하세요..."
+                  placeholder="레퍼런스 배우 이름을 입력하세요..."
                   className="w-full px-6 py-4 bg-purple-800/40 backdrop-blur-xl border border-fuchsia-600/40 rounded-xl text-white placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400/60 transition-all shadow-inner"
                 />
+                {targetActor && (
+                  <div className="mt-3 flex items-center gap-2 text-sm text-amber-300">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span>레퍼런스: <strong>{targetActor}</strong></span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -411,14 +426,14 @@ export default function Page() {
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-br from-amber-400 via-fuchsia-500 to-purple-600 rounded-3xl blur-2xl opacity-30 group-hover:opacity-60 transition-opacity duration-500" />
                     <div className="relative w-24 h-24 rounded-3xl bg-gradient-to-br from-amber-400/20 via-fuchsia-500/20 to-purple-600/20 backdrop-blur-xl border border-amber-400/50 flex items-center justify-center shadow-2xl transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-                      <span className="text-5xl">🪔</span>
+                      <span className="text-5xl">📸</span>
                     </div>
                   </div>
                   <div>
                     <p className="text-2xl font-light text-white mb-3">
-                      {isDragActive ? '✨ 여기에 파일을 놓으세요' : '💫 마법의 이미지 업로드'}
+                      {isDragActive ? '✨ 여기에 파일을 놓으세요' : '2️⃣ 지원자 사진 업로드 💫'}
                     </p>
-                    <p className="text-sm text-purple-300">드래그 앤 드롭 또는 클릭하여 선택 • JPG, PNG, WEBP 지원</p>
+                    <p className="text-sm text-purple-300">오디션 지원 배우들의 프로필 사진을 여러 장 업로드 • JPG, PNG, WEBP</p>
                   </div>
                   <label className="relative group cursor-pointer">
                     <div className="absolute inset-0 bg-gradient-to-r from-amber-400 via-fuchsia-500 to-purple-600 rounded-xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity duration-300" />
@@ -445,10 +460,10 @@ export default function Page() {
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400/30 to-fuchsia-500/30 backdrop-blur-sm border border-amber-400/50 flex items-center justify-center">
-                      <span className="text-xl">⭐</span>
+                      <span className="text-xl">🎯</span>
                     </div>
                     <label htmlFor="topk" className="text-base font-medium text-purple-200">
-                      소원 개수 ✨
+                      3️⃣ 보고 싶은 인원 수 ✨
                     </label>
                     {/* Tooltip */}
                     <div className="group relative">
@@ -456,13 +471,14 @@ export default function Page() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                       <div className="hidden group-hover:block absolute left-0 top-6 w-48 p-2 bg-purple-900 border border-fuchsia-700 rounded-lg shadow-xl z-10">
-                        <p className="text-xs text-purple-300">업로드된 각 이미지에 대해 표시할 유사 배우의 수를 선택하세요</p>
+                        <p className="text-xs text-purple-300">상위 몇 명까지 볼지 선택하세요 (예: Top 3, Top 5, Top 10)</p>
                       </div>
                     </div>
                   </div>
                   <span className="text-3xl font-semibold bg-gradient-to-r from-amber-300 via-fuchsia-400 to-purple-400 bg-clip-text text-transparent px-6 py-2 rounded-xl bg-purple-900/60 border border-amber-400/50 min-w-[70px] text-center shadow-lg">
-                    {topK}
+                    TOP {topK}
                   </span>
+                </div>
                 </div>
                 <input
                   id="topk"
@@ -524,8 +540,8 @@ export default function Page() {
                     </span>
                   ) : (
                     <span className="flex items-center justify-center gap-2">
-                      <span className="text-xl">🪔</span>
-                      지니의 마법 시작 ✨
+                      <span className="text-xl">🎬</span>
+                      4️⃣ AI 분석 시작 ✨
                     </span>
                   )}
                 </div>
@@ -592,19 +608,16 @@ export default function Page() {
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-2xl font-light text-white flex items-center gap-4">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm border border-slate-600/50 flex items-center justify-center">
-                    <svg className="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                    </svg>
+                    <span className="text-xl">🏆</span>
                   </div>
                   <span className="text-slate-200">
                     {targetActor ? (
                       <span>
-                        <span className="text-amber-300 font-semibold">&apos;{targetActor}&apos;</span>
-                        <span className="text-slate-400 mx-2">님과 닮은</span>
-                        <span className="text-fuchsia-300">지원 배우</span>
+                        5️⃣ <span className="text-amber-300 font-semibold">&apos;{targetActor}&apos;</span>
+                        <span className="text-slate-400 mx-2">닮은 순위</span>
                       </span>
                     ) : (
-                      '분석 결과'
+                      '5️⃣ 분석 결과'
                     )}
                   </span>
                 </h2>
@@ -648,10 +661,25 @@ export default function Page() {
                         res.map((r, rank) => (
                           <div
                             key={`${i}-${r.name}`}
-                            className="relative flex items-center gap-4 p-4 backdrop-blur-xl bg-gradient-to-br from-slate-800/40 to-slate-700/40 border border-slate-600/50 rounded-xl hover:bg-slate-800/60 hover:border-slate-500/60 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300 group/item"
+                            className={`relative flex items-center gap-4 p-4 backdrop-blur-xl rounded-xl transition-all duration-300 group/item ${
+                              r.is_reference 
+                                ? 'bg-gradient-to-br from-amber-500/20 to-fuchsia-500/20 border-2 border-amber-400/60 hover:border-amber-400/80 hover:shadow-2xl hover:shadow-amber-400/30' 
+                                : 'bg-gradient-to-br from-slate-800/40 to-slate-700/40 border border-slate-600/50 hover:bg-slate-800/60 hover:border-slate-500/60 hover:shadow-lg hover:shadow-blue-500/10'
+                            }`}
                           >
+                            {/* Reference Badge */}
+                            {r.is_reference && (
+                              <div className="absolute -top-2 -right-2 px-3 py-1 bg-gradient-to-r from-amber-400 to-fuchsia-500 rounded-full text-xs font-bold text-white shadow-lg animate-pulse">
+                                🎯 레퍼런스
+                              </div>
+                            )}
+                            
                             {/* Rank Badge */}
-                            <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-500/30 to-purple-500/30 border border-slate-600/50 rounded-xl text-white text-base font-bold shadow-lg group-hover/item:scale-110 transition-transform duration-300">
+                            <div className={`flex items-center justify-center w-10 h-10 border rounded-xl text-white text-base font-bold shadow-lg group-hover/item:scale-110 transition-transform duration-300 ${
+                              r.is_reference
+                                ? 'bg-gradient-to-br from-amber-400/40 to-fuchsia-500/40 border-amber-400/60'
+                                : 'bg-gradient-to-br from-blue-500/30 to-purple-500/30 border-slate-600/50'
+                            }`}>
                               {rank + 1}
                             </div>
                             

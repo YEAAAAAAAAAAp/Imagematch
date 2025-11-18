@@ -69,6 +69,7 @@ async def match_actors(
 async def match_actors_batch(
     files: list[UploadFile] = File(...),
     top_k: int = Query(3, ge=1, le=10),
+    reference_actor: str = Query(None, description="레퍼런스 배우 이름 (선택)"),
 ):
     if not files:
         raise HTTPException(status_code=400, detail="이미지 파일을 업로드하세요")
@@ -85,11 +86,32 @@ async def match_actors_batch(
             q = image_embedding(contents)
             top = INDEX.topk(q, k=top_k)
             items = []
+            reference_idx = None
+            reference_score = None
+            
+            # 레퍼런스 배우가 지정된 경우, 해당 배우와의 유사도를 찾음
+            if reference_actor:
+                for idx, score in top:
+                    info = INDEX.info(idx)
+                    if info.get("name", "").lower() == reference_actor.lower().strip():
+                        reference_idx = idx
+                        reference_score = score
+                        break
+            
             for idx, score in top:
                 info = INDEX.info(idx)
                 image_url = f"/actors/{info['image_rel']}" if info.get("image_rel") else None
-                items.append({"name": info.get("name", f"Actor {idx}"), "score": score, "image_url": image_url})
-            outputs.append({"filename": f.filename, "results": items})
+                items.append({
+                    "name": info.get("name", f"Actor {idx}"), 
+                    "score": score, 
+                    "image_url": image_url,
+                    "is_reference": info.get("name", "").lower() == reference_actor.lower().strip() if reference_actor else False
+                })
+            
+            result = {"filename": f.filename, "results": items}
+            if reference_score is not None:
+                result["reference_score"] = reference_score
+            outputs.append(result)
         except FileNotFoundError as e:
             raise HTTPException(status_code=503, detail=str(e))
         except Exception as e:

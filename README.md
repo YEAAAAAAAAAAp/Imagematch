@@ -1,180 +1,301 @@
-# 배우 유사도 매칭 Agent (Imagematch)
+# Genie Match - AI 캐스팅 솔루션 🪔✨
 
-업로드한 얼굴 사진을 분석해, 사전에 구축한 배우 임베딩 인덱스에서 유사도가 높은 배우 TOP3를 반환하는 FastAPI 기반 서비스입니다.
+시나리오에 생각한 유명 배우를 자연어로 입력하고, 지원받은 배우들의 사진을 업로드하면 유사도 기준으로 지원자를 랭킹해주는 AI 기반 캐스팅 매칭 서비스입니다.
 
-- 백엔드: FastAPI + CLIP (HuggingFace Transformers, PyTorch)
-- 임베딩: CLIP ViT-B/32 이미지 임베딩 (코사인 유사도)
-- 인덱스: 배우별 대표 임베딩(여러 장 평균) + 메타데이터(JSON)
-- 프론트엔드: Next.js(App Router) + Tailwind UI (드래그&드롭, 미리보기, 진행률, Top‑K 슬라이더, 다중 업로드)
-  - 참고: 과거 `frontend/index.html` 정적 페이지는 더 이상 사용하지 않으며, Next.js 앱이 대체합니다.
+## 주요 특징
 
-## 폴더 구조
+- 🎭 **자연어 타겟 입력**: 목표 배우 이름을 자연어로 입력
+- 🔮 **AI 얼굴 매칭**: CLIP 임베딩 기반 코사인 유사도 분석
+- ⚡ **배치 처리**: 여러 지원자 이미지 동시 분석
+- ✨ **Genie 테마**: 마법적인 사용자 경험 제공
+- 📊 **Top-K 조절**: 1~10개의 결과 개수 조절 가능
+
+## 기술 스택
+
+### 백엔드
+- **FastAPI**: REST API 서버
+- **CLIP (ViT-B/32)**: HuggingFace Transformers 이미지 임베딩
+- **PyTorch**: 딥러닝 프레임워크
+- **Uvicorn**: ASGI 서버
+
+### 프론트엔드
+- **Next.js 14.2.10**: App Router 기반 React 프레임워크
+- **TypeScript**: 타입 안전성
+- **Tailwind CSS**: 유틸리티 기반 스타일링
+- **Genie Theme**: 커스텀 Purple/Fuchsia/Amber 그라데이션
+
+## 프로젝트 구조
 
 ```
 backend/
   app/
-    main.py                # API 엔드포인트 (/match-actors)
-    models/schemas.py      # 응답 스키마
+    main.py                      # FastAPI 엔드포인트
+    models/schemas.py            # Pydantic 스키마
     services/
-      embeddings.py        # CLIP 임베딩 계산
-      search.py            # 인덱스 로드/탐색
-    data/                  # 생성된 인덱스와 배우 썸네일(생성됨)
+      embeddings.py              # CLIP 임베딩 생성
+      face_preprocess.py         # 얼굴 전처리 (옵션)
+      search.py                  # 배우 인덱스 검색
+    data/                        # 생성된 인덱스 파일
+      embeddings.npy             # 배우 임베딩 벡터
+      metadata.json              # 배우 메타데이터
+      actors/                    # 배우 대표 이미지
   scripts/
-    build_actor_index.py   # 데이터셋에서 배우 인덱스 생성
+    build_actor_index.py         # 인덱스 빌더
+
 frontend/
-  app/                     # Next.js App Router (페이지/라우트)
+  app/
+    page.tsx                     # 메인 페이지 (Genie UI)
+    layout.tsx                   # 레이아웃
+    globals.css                  # Tailwind 설정
     api/
-      match-actors/route.ts          # 단일 업로드 프록시 → FastAPI
-      match-actors-batch/route.ts    # 배치 업로드 프록시 → FastAPI
-    layout.tsx
-    page.tsx               # 업로드 UI (드래그&드롭/미리보기/Top‑K/다중 업로드)
-    globals.css            # Tailwind 활성화
-  next.config.mjs          # Next/Image 원격 패턴 설정(백엔드 정적 이미지)
-  package.json             # Next/React 의존성
-  postcss.config.js, tailwind.config.js
-requirements.txt           # Python 의존성
-README.md                  # 이 문서
+      match-actors/route.ts      # 단일 매칭 API 라우트
+      match-actors-batch/route.ts # 배치 매칭 API 라우트
+  public/
+    Genie-clean.png              # 지니 로고 (투명 배경)
+    Genie.png                    # 지니 이미지 (원본)
+  next.config.mjs                # Next.js 설정
+  tailwind.config.js             # Tailwind 커스텀 테마
+
+tests/
+  test_api.py                    # API 테스트
+
+requirements.txt                 # Python 의존성
+package.json                     # Node.js 의존성
+README.md                        # 프로젝트 문서
 ```
 
-## 사전 준비 (Windows, PowerShell)
+## 설치 및 실행
 
-1) Python 3.10+ 설치 (권장: 3.10/3.11). 설치 시 "Add Python to PATH" 체크.
+### 1. Python 환경 설정 (Windows PowerShell)
 
-2) 가상환경 생성 및 활성화
+**요구사항**: Python 3.10 이상
 
 ```powershell
+# 가상환경 생성 및 활성화
 python -m venv .venv
 .\.venv\Scripts\Activate
-```
 
-3) 의존성 설치
-
-- 기본 패키지 설치:
-
-```powershell
+# Python 패키지 설치
 pip install -r requirements.txt
-```
 
-- PyTorch (Windows)는 공식 가이드로 설치하세요. CPU만 사용 시 예:
-
-```powershell
-# CPU 전용(예시) - 최신 설치 명령은 링크에서 확인
+# PyTorch 설치 (CPU 버전)
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 ```
 
-자세한 설치 방법: https://pytorch.org/get-started/locally/
+> **참고**: GPU 사용 시 [PyTorch 공식 사이트](https://pytorch.org/get-started/locally/)에서 CUDA 버전에 맞는 설치 명령을 확인하세요.
 
-## 배우 인덱스 만들기
+### 2. 배우 인덱스 생성
 
-배우 이미지 데이터셋이 필요합니다. 두 가지 방식을 지원합니다.
+배우 이미지 데이터셋을 준비합니다. 두 가지 방식을 지원합니다.
 
-1) 폴더 구조 (권장):
+#### 방법 1: 폴더 구조 (권장)
+
 ```
 C:\data\actors\
-  전지현\*.jpg
-  송강호\*.png
-  ...
+  송강호\
+    image1.jpg
+    image2.jpg
+  전지현\
+    photo1.png
+    photo2.png
+  이정재\
+    pic1.jpg
 ```
-배우 폴더마다 여러 장의 이미지를 넣어주세요. 스크립트가 폴더별로 평균 임베딩을 계산합니다.
-
-2) CSV 파일:
-```
-name,image_path
-전지현,C:\data\img\juneji1.jpg
-전지현,C:\data\img\juneji2.jpg
-송강호,C:\data\img\song1.png
-```
-
-### 인덱스 생성 실행
 
 ```powershell
-# 폴더 기반
 python backend\scripts\build_actor_index.py --dataset-dir C:\data\actors
+```
 
-# 또는 CSV 기반
+#### 방법 2: CSV 파일
+
+```csv
+name,image_path
+송강호,C:\data\images\song1.jpg
+송강호,C:\data\images\song2.jpg
+전지현,C:\data\images\jeon1.png
+```
+
+```powershell
 python backend\scripts\build_actor_index.py --csv C:\data\actors.csv
 ```
 
-완료 후 `backend/app/data/` 아래에 다음 파일이 생성됩니다.
-- `embeddings.npy`: 배우별 임베딩 (N x D)
-- `metadata.json`: 배우 이름과 대표 이미지 상대경로
-- `actors/`: 대표 이미지 저장(정적 서비스용)
+**생성 결과**: `backend/app/data/` 폴더에 다음 파일이 생성됩니다.
+- `embeddings.npy`: 배우 임베딩 벡터 (N × 512 차원)
+- `metadata.json`: 배우 이름 및 대표 이미지 경로
+- `actors/`: 배우 대표 이미지 사본
 
-## 서버 실행
+### 3. 서버 실행
+
+#### 백엔드 서버 (FastAPI)
 
 ```powershell
-uvicorn backend.app.main:app --reload --port 8000
+cd backend
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-프런트엔드(Next.js):
+서버 실행 후: http://localhost:8000/docs 에서 API 문서 확인
+
+#### 프론트엔드 서버 (Next.js)
+
+새 터미널을 열고:
 
 ```powershell
 cd frontend
-# 환경 변수 파일 생성(.env)
-# 로컬 개발 예시
-"@"
-Add-Content .env "BACKEND_URL=http://localhost:8000"
-Add-Content .env "NEXT_PUBLIC_BACKEND_URL=http://localhost:8000"
+
+# 환경 변수 설정
+echo "BACKEND_URL=http://localhost:8000" > .env
+echo "NEXT_PUBLIC_BACKEND_URL=http://localhost:8000" >> .env
+
+# 패키지 설치 (최초 1회)
 npm install
+
+# 개발 서버 시작
 npm run dev
 ```
 
-브라우저에서 http://localhost:3000 접속 후 업로드/Top-K 조절/다중 업로드를 확인하세요.
+브라우저에서 http://localhost:3000 접속
 
-- API:
-  - 단일: `POST http://localhost:8000/match-actors?top_k=3` (form-data: file=이미지)
-  - 배치: `POST http://localhost:8000/match-actors-batch?top_k=3` (form-data: files=이미지들)
+## 사용 방법
 
-## 환경 변수(프론트)
+1. **목표 배우 입력**: 시나리오에 생각한 유명 배우 이름 입력 (예: 송강호, 전지현)
+2. **이미지 업로드**: 지원자 사진을 드래그&드롭 또는 파일 선택
+3. **소원 개수 조절**: 슬라이더로 결과 개수 설정 (1-10개)
+4. **분석 시작**: "🪔 지니의 마법 시작 ✨" 버튼 클릭
+5. **결과 확인**: 목표 배우와 유사한 순서대로 지원자 랭킹 확인
 
-- BACKEND_URL: 프록시 서버 라우트가 참조하는 FastAPI 주소
-- NEXT_PUBLIC_BACKEND_URL: 브라우저에서 배우 이미지 URL(`/actors/...`)을 만들 때 사용(공개)
+## API 엔드포인트
 
-로컬 개발:
+### 단일 이미지 매칭
+```http
+POST /match-actors?top_k=3
+Content-Type: multipart/form-data
+
+file: [이미지 파일]
 ```
+
+### 배치 이미지 매칭
+```http
+POST /match-actors-batch?top_k=5
+Content-Type: multipart/form-data
+
+files: [이미지 파일1]
+files: [이미지 파일2]
+files: [이미지 파일3]
+```
+
+**응답 예시**:
+```json
+{
+  "items": [
+    {
+      "results": [
+        {
+          "name": "송강호",
+          "score": 0.8523,
+          "image_rel": "actor_001.jpg",
+          "image_url": "http://localhost:8000/actors/actor_001.jpg"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## 환경 변수
+
+### 프론트엔드 (.env)
+
+```env
+# 서버 사이드에서 FastAPI 호출 시 사용
 BACKEND_URL=http://localhost:8000
+
+# 클라이언트에서 이미지 URL 생성 시 사용
 NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
 ```
 
-프로덕션(Vercel): 프로젝트 Settings > Environment Variables에 같은 키를 프로덕션 URL로 입력하세요.
+### 프로덕션 배포 (Vercel)
 
-## 동작 방식
+Vercel 프로젝트 설정에서 Environment Variables 추가:
+- `BACKEND_URL`: 백엔드 API 서버 주소
+- `NEXT_PUBLIC_BACKEND_URL`: 백엔드 정적 파일 서버 주소
 
-- 업로드한 이미지를 CLIP으로 임베딩 → 코사인 유사도로 배우 인덱스와 비교 → 상위 3명 반환
-- `backend/app/services/embeddings.py`: CLIP 모델/프로세서 로드 및 이미지 임베딩 계산 (옵션) InsightFace로 얼굴 크롭/정렬 후 임베딩
-- `backend/app/services/search.py`: `backend/app/data/`의 인덱스를 로드하고 탐색
+## 동작 원리
 
-## 자주 묻는 질문
+1. **임베딩 생성**: CLIP 모델이 업로드된 이미지를 512차원 벡터로 변환
+2. **유사도 계산**: 코사인 유사도로 배우 인덱스와 비교
+3. **랭킹**: 유사도 점수가 높은 순서로 Top-K 배우 반환
+4. **결과 표시**: 프론트엔드에서 배우 정보와 점수 시각화
 
-- GPU가 꼭 필요한가요?
-  - 아닙니다. CPU로도 동작합니다. 다만 최초 모델 로드가 느릴 수 있습니다.
+### 핵심 컴포넌트
 
-- 인덱스를 만들기 전 요청하면?
-  - 인덱스 파일이 없으면 503 에러를 반환합니다.
-  - 인덱스가 "존재하지만 비어있는(0명)" 경우에는 200 OK와 함께 빈 `results` 배열을 반환합니다.
-
-- 얼굴 인식 전용 모델인가요?
-  - CLIP은 일반 이미지 임베딩 모델입니다. 얼굴 전용 모델보다 정확도는 낮을 수 있지만, 설치와 운용이 쉽습니다. 더 높은 정확도가 필요하면 FaceNet/ArcFace/InsightFace 등으로 교체 가능합니다.
+- `embeddings.py`: CLIP ViT-B/32 모델로 이미지 임베딩 생성
+- `search.py`: NumPy 기반 코사인 유사도 계산 및 Top-K 검색
+- `build_actor_index.py`: 배우별 이미지를 평균하여 대표 벡터 생성
+- `page.tsx`: Genie 테마 UI, 드래그&드롭, 진행률 표시
 
 ## 테스트
 
-간단한 헬스체크 및 인덱스 미구축 시 동작 테스트가 포함되어 있습니다.
-
 ```powershell
-pytest -q
+# 전체 테스트 실행
+pytest -v
+
+# 특정 테스트만 실행
+pytest tests/test_api.py -v
 ```
 
-## 배포(Vercel)
+## FAQ
 
-1) GitHub 레포를 Vercel에 Import (Framework: Next.js)
-2) 환경 변수 등록(BACKEND_URL, NEXT_PUBLIC_BACKEND_URL)
-3) 배포 후 https://{vercel-domain} 접속 → 업로드/결과 확인
+### GPU가 필요한가요?
+CPU만으로도 동작합니다. 최초 모델 로드 시 시간이 소요될 수 있습니다.
 
-원격 이미지(배우 대표 이미지)를 Next/Image로 최적화하려면 `next.config.mjs`의 `images.remotePatterns`에
-프로덕션 백엔드 도메인을 명시적으로 추가하세요.
+### 인덱스 없이 API를 호출하면?
+`503 Service Unavailable` 에러를 반환합니다. 먼저 인덱스를 생성해야 합니다.
 
-## 향후 개선 아이디어
+### CLIP 대신 다른 모델을 사용할 수 있나요?
+네, `embeddings.py`를 수정하여 FaceNet, ArcFace, InsightFace 등으로 교체 가능합니다.
 
-- Next/Image 최적화 고도화(도메인 설정, 캐시 전략)
-- 프론트 디자인 시스템/컴포넌트 라이브러리 도입
-- 배우 데이터셋 관리 도구(추가/삭제/재인덱싱)
+### 결과의 정확도를 높이려면?
+- 배우 데이터셋의 이미지 품질과 수량을 늘리세요
+- 얼굴 전용 임베딩 모델로 교체하세요
+- `face_preprocess.py`의 얼굴 정렬 기능을 활성화하세요
+
+## 배포
+
+### Vercel 배포
+
+1. GitHub 저장소를 Vercel에 Import
+2. Framework Preset: **Next.js**
+3. Root Directory: `frontend`
+4. Environment Variables 설정:
+   - `BACKEND_URL`: 백엔드 API 주소
+   - `NEXT_PUBLIC_BACKEND_URL`: 백엔드 정적 파일 주소
+5. Deploy 클릭
+
+### 백엔드 배포 (예: Railway, Render)
+
+```bash
+# 프로덕션 서버 실행 예시
+uvicorn backend.app.main:app --host 0.0.0.0 --port 8000
+```
+
+## 향후 개선 사항
+
+- [ ] 실시간 웹캠 촬영 및 분석
+- [ ] 배우 데이터셋 관리 대시보드
+- [ ] 유사도 히트맵 시각화
+- [ ] 다국어 지원 (영어, 일본어)
+- [ ] 배우 프로필 상세 정보 표시
+- [ ] CSV/Excel 결과 내보내기
+- [ ] 얼굴 전용 모델 옵션 (FaceNet, ArcFace)
+
+## 라이선스
+
+MIT License
+
+## 문의
+
+프로젝트 관련 문의: **disco922@naver.com**
+
+---
+
+Made with 🪔 by Genie Match Team
