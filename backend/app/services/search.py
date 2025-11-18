@@ -20,9 +20,11 @@ class ActorIndex:
         if self._loaded:
             return
         if not EMB_PATH.exists() or not META_PATH.exists():
-            raise FileNotFoundError(
-                "Actor index not built. Run the index builder script to create embeddings and metadata."
-            )
+            # 데이터가 없으면 빈 인덱스로 초기화
+            self._emb = np.array([], dtype="float32").reshape(0, 512)
+            self._meta = []
+            self._loaded = True
+            return
         self._emb = np.load(str(EMB_PATH)).astype("float32")
         # ensure normalized rows
         norms = np.linalg.norm(self._emb, axis=1, keepdims=True) + 1e-12
@@ -36,6 +38,11 @@ class ActorIndex:
     def topk(self, query_emb: np.ndarray, k: int = 3) -> List[Tuple[int, float]]:
         self.ensure_loaded()
         assert self._emb is not None
+        
+        # 데이터가 비어있으면 빈 결과 반환
+        if len(self._emb) == 0:
+            return []
+        
         q = query_emb.astype("float32")
         q = q / (np.linalg.norm(q) + 1e-12)
         # cosine similarity via dot product since rows are normalized
