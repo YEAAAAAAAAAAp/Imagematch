@@ -118,7 +118,10 @@ export default function Page() {
     setProgress(0)
   }
 
-  const previews = useMemo(() => files.map((f: File) => ({ name: f.name, url: URL.createObjectURL(f) })), [files])
+  const previews = useMemo(
+    () => files.map((f: File) => ({ name: f.name, url: URL.createObjectURL(f) })),
+    [files]
+  );
 
   return (
     <main className="min-h-screen relative overflow-hidden">
