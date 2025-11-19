@@ -118,12 +118,10 @@ export default function Page() {
     setProgress(0)
   }
 
-  const previews = useMemo(() => {
-    return files.map((f: File) => ({ name: f.name, url: URL.createObjectURL(f) }))
-  }, [files])
+  const previews = useMemo(() => files.map((f: File) => ({ name: f.name, url: URL.createObjectURL(f) })), [files])
 
   return (
-    <section className="min-h-screen relative overflow-hidden">
+    <main className="min-h-screen relative overflow-hidden">
       {/* Genie Magic Background */}
       <div className="fixed inset-0 bg-gradient-to-br from-purple-950 via-indigo-950 to-violet-950">
         {/* Mystical Gradient Overlay */}
@@ -897,6 +895,6 @@ export default function Page() {
           </div>
         </footer>
       </div>
-    </section>
+    </main>
   )
 }
