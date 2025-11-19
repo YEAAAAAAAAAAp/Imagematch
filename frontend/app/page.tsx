@@ -479,7 +479,6 @@ export default function Page() {
                     TOP {topK}
                   </span>
                 </div>
-                </div>
                 <input
                   id="topk"
                   type="range"
