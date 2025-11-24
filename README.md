@@ -6,7 +6,7 @@
 
 - 🎯 **레퍼런스 배우 매칭**: 유명 배우 이름 입력 시 결과에서 자동 하이라이팅
 - 🎭 **자연어 타겟 입력**: 목표 배우 이름을 자연어로 입력
-- 🔮 **AI 얼굴 매칭**: InsightFace Buffalo_L 모델 기반 얼굴 인식 및 유사도 분석
+- 🔮 **AI 얼굴 매칭**: InsightFace AuraFace-v1 모델 기반 얼굴 인식 및 유사도 분석
 - ⚡ **배치 처리**: 여러 지원자 이미지 동시 분석
 - ✨ **Genie 테마**: Purple/Fuchsia/Amber 그라데이션으로 마법적인 UX
 - 📊 **Top-K 조절**: 1~10개의 결과 개수 조절 가능
@@ -16,9 +16,10 @@
 
 ### 백엔드
 - **FastAPI**: REST API 서버
-- **InsightFace (Buffalo_L)**: 얼굴 전용 임베딩 모델 (512차원)
-- **ONNX Runtime**: 모델 추론 엔진
-- **OpenCV**: 이미지 처리
+- **InsightFace (AuraFace-v1)**: 얼굴 전용 임베딩 모델 (512차원)
+- **ONNX Runtime**: 모델 추론 엔진 (CPU/GPU)
+- **OpenCV 4.10**: 이미지 처리
+- **NumPy 1.26**: 수치 연산 (InsightFace 호환성)
 - **Uvicorn**: ASGI 서버
 
 ### 프론트엔드
@@ -43,7 +44,7 @@ backend/
       metadata.json              # 배우 메타데이터
       actors/                    # 배우 대표 이미지
   scripts/
-    build_actor_index.py         # 인덱스 빌더
+    build_actor_index_insightface.py  # InsightFace 인덱스 빌더
 
 frontend/
   app/
@@ -82,7 +83,12 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-> **참고**: InsightFace는 자동으로 Buffalo_L 모델(~100MB)을 다운로드합니다. Windows에서는 Visual C++ Build Tools가 필요할 수 있습니다.
+> **참고**: InsightFace는 자동으로 AuraFace-v1 모델(~100MB)을 다운로드합니다. Windows에서는 Visual C++ Build Tools가 필요할 수 있습니다.
+
+**주요 의존성**:
+- `numpy>=1.21.0,<2.0.0` (InsightFace 호환성)
+- `opencv-python==4.10.0.84` (numpy<2 호환)
+- `insightface>=0.7.3` (AuraFace-v1 모델)
 
 ### 2. 배우 인덱스 생성
 
@@ -103,7 +109,7 @@ C:\data\actors\
 ```
 
 ```powershell
-python backend\scripts\build_actor_index.py --dataset-dir C:\data\actors
+python backend\scripts\build_actor_index_insightface.py --dataset-dir C:\data\actors
 ```
 
 #### 방법 2: CSV 파일
@@ -116,7 +122,7 @@ name,image_path
 ```
 
 ```powershell
-python backend\scripts\build_actor_index.py --csv C:\data\actors.csv
+python backend\scripts\build_actor_index_insightface.py --csv C:\data\actors.csv
 ```
 
 **생성 결과**: `backend/app/data/` 폴더에 다음 파일이 생성됩니다.
@@ -129,8 +135,11 @@ python backend\scripts\build_actor_index.py --csv C:\data\actors.csv
 #### 백엔드 서버 (FastAPI)
 
 ```powershell
+# 가상환경 활성화 (필수)
+.\.venv\Scripts\Activate.ps1
+
 cd backend
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 서버 실행 후: http://localhost:8000/docs 에서 API 문서 확인
