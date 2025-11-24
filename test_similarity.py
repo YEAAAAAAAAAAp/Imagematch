@@ -18,7 +18,7 @@ def load_image_bytes(image_path: Path) -> bytes:
     with open(image_path, 'rb') as f:
         return f.read()
 
-def get_actor_representative_embedding(actor_dir: Path) -> tuple[str, np.ndarray]:
+def get_actor_representative_embedding(actor_dir: Path) -> tuple[str, np.ndarray | None]:
     """배우 폴더의 이미지들을 평균내어 대표 임베딩 생성"""
     actor_name = actor_dir.name
     embeddings = []
