@@ -22,7 +22,7 @@ except ImportError:
 
 
 class InsightFaceRAG:
-    """InsightFace Buffalo_L을 사용한 얼굴 이미지 검색 시스템"""
+    """InsightFace AuraFace-v1을 사용한 얼굴 이미지 검색 시스템"""
     
     def __init__(self, ctx_id: int = 0):
         """
@@ -33,15 +33,15 @@ class InsightFaceRAG:
         self.image_database: List[Dict] = []
         self.embeddings_matrix: Optional[np.ndarray] = None
         
-        print("🔮 InsightFace Buffalo_L 모델 로딩 중...")
+        print("🔮 InsightFace AuraFace-v1 모델 로딩 중...")
         self._load_model()
         print("✅ 모델 로딩 완료")
     
     def _load_model(self):
-        """InsightFace Buffalo_L 모델 로드"""
-        # InsightFace 기본 모델 사용 (buffalo_l)
+        """InsightFace AuraFace-v1 모델 로드"""
+        # AuraFace-v1 모델 사용
         self.model = FaceAnalysis(
-            name="buffalo_l",
+            name="auraface",
             root="."
         )
         self.model.prepare(ctx_id=self.ctx_id, det_size=(640, 640))
