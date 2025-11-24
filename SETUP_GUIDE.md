@@ -37,14 +37,14 @@ C:\data\actors\
 .\.venv\Scripts\Activate
 
 # 필요한 패키지가 모두 설치되어 있는지 확인
-pip list | Select-String -Pattern "transformers|torch|fastapi"
+pip list | Select-String -Pattern "insightface|fastapi"
 ```
 
 #### 1-3. 배우 인덱스 생성 (필수!)
 
 ```powershell
-# 배우 임베딩 인덱스 생성
-python backend\scripts\build_actor_index.py --dataset-dir C:\data\actors
+# 배우 임베딩 인덱스 생성 (InsightFace Buffalo_L 모델 사용)
+python backend\scripts\build_actor_index_insightface.py --dataset-dir C:\data\actors
 ```
 
 **실행 결과 확인**:

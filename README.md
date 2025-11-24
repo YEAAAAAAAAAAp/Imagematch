@@ -6,7 +6,7 @@
 
 - 🎯 **레퍼런스 배우 매칭**: 유명 배우 이름 입력 시 결과에서 자동 하이라이팅
 - 🎭 **자연어 타겟 입력**: 목표 배우 이름을 자연어로 입력
-- 🔮 **AI 얼굴 매칭**: CLIP 임베딩 기반 코사인 유사도 분석
+- 🔮 **AI 얼굴 매칭**: InsightFace Buffalo_L 모델 기반 얼굴 인식 및 유사도 분석
 - ⚡ **배치 처리**: 여러 지원자 이미지 동시 분석
 - ✨ **Genie 테마**: Purple/Fuchsia/Amber 그라데이션으로 마법적인 UX
 - 📊 **Top-K 조절**: 1~10개의 결과 개수 조절 가능
@@ -16,8 +16,9 @@
 
 ### 백엔드
 - **FastAPI**: REST API 서버
-- **CLIP (ViT-B/32)**: HuggingFace Transformers 이미지 임베딩
-- **PyTorch**: 딥러닝 프레임워크
+- **InsightFace (Buffalo_L)**: 얼굴 전용 임베딩 모델 (512차원)
+- **ONNX Runtime**: 모델 추론 엔진
+- **OpenCV**: 이미지 처리
 - **Uvicorn**: ASGI 서버
 
 ### 프론트엔드
@@ -34,7 +35,7 @@ backend/
     main.py                      # FastAPI 엔드포인트
     models/schemas.py            # Pydantic 스키마
     services/
-      embeddings.py              # CLIP 임베딩 생성
+      embeddings.py              # InsightFace 얼굴 임베딩 생성
       face_preprocess.py         # 얼굴 전처리 (옵션)
       search.py                  # 배우 인덱스 검색
     data/                        # 생성된 인덱스 파일
@@ -79,12 +80,9 @@ python -m venv .venv
 
 # Python 패키지 설치
 pip install -r requirements.txt
-
-# PyTorch 설치 (CPU 버전)
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 ```
 
-> **참고**: GPU 사용 시 [PyTorch 공식 사이트](https://pytorch.org/get-started/locally/)에서 CUDA 버전에 맞는 설치 명령을 확인하세요.
+> **참고**: InsightFace는 자동으로 Buffalo_L 모델(~100MB)을 다운로드합니다. Windows에서는 Visual C++ Build Tools가 필요할 수 있습니다.
 
 ### 2. 배우 인덱스 생성
 

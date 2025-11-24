@@ -8,7 +8,7 @@ from .models.schemas import MatchResponse, MatchResult
 from .services.embeddings import image_embedding
 from .services.search import INDEX, ACTOR_IMAGES_DIR
 
-app = FastAPI(title="Actor Image Matcher", version="0.1.0")
+app = FastAPI(title="Genie Match - Actor Image Matcher", version="1.0.0 (InsightFace)")
 
 # Allow local dev frontend
 app.add_middleware(
@@ -43,6 +43,10 @@ async def match_actors(
 
     try:
         query = image_embedding(contents)
+        if query is None:
+            raise HTTPException(status_code=400, detail="이미지에서 얼굴을 감지할 수 없습니다.")
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"이미지 처리 실패: {e}")
 
@@ -84,6 +88,9 @@ async def match_actors_batch(
             continue
         try:
             q = image_embedding(contents)
+            if q is None:
+                outputs.append({"filename": f.filename, "error": "얼굴을 감지할 수 없습니다"})
+                continue
             top = INDEX.topk(q, k=top_k)
             items = []
             reference_idx = None
