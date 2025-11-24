@@ -1,37 +1,25 @@
 """
-InsightFace AuraFace-v1 기반 얼굴 임베딩 서비스
-CLIP에서 InsightFace로 완전 교체
+InsightFace AuraFace-v1 기반 얼굴 임베딩 서비스 (Image_RAG 의존성 제거)
 """
 from functools import lru_cache
 from io import BytesIO
 from typing import Optional
-from pathlib import Path
-import sys
 
 import numpy as np
 from PIL import Image
 import cv2
-
-# Image_RAG 모듈 경로 추가
-project_root = Path(__file__).parent.parent.parent.parent
-sys.path.insert(0, str(project_root / "Image_RAG"))
-
-try:
-    from insightface_rag import InsightFaceRAG
-except ImportError as e:
-    print(f"⚠️ InsightFace RAG 모듈을 찾을 수 없습니다: {e}")
-    print(f"경로 확인: {project_root / 'Image_RAG'}")
-    raise
+from insightface.app import FaceAnalysis
 
 
 @lru_cache(maxsize=1)
-def get_insightface_model() -> InsightFaceRAG:
+def get_insightface_model() -> FaceAnalysis:
     """
     InsightFace AuraFace-v1 모델 싱글톤
     최초 호출 시 모델을 로드하고 캐시합니다.
     """
     print("🔮 InsightFace AuraFace-v1 모델 로딩 중...")
-    model = InsightFaceRAG(ctx_id=0)  # 0: GPU, -1: CPU
+    model = FaceAnalysis(name="auraface", root=".")
+    model.prepare(ctx_id=-1, det_size=(640, 640))  # -1: CPU, 0: GPU
     print("✅ InsightFace 모델 로딩 완료")
     return model
 
@@ -49,7 +37,7 @@ def _load_image(img_bytes: bytes) -> np.ndarray:
 
 def image_embedding(img_bytes: bytes) -> Optional[np.ndarray]:
     """
-    이미지를 512차원 얼굴 임베딩 벡터로 변환 (InsightFace)
+    이미지를 512차원 얼굴 임베딩 벡터로 변환 (InsightFace AuraFace-v1)
     
     Args:
         img_bytes: 이미지 바이트 데이터
@@ -61,15 +49,18 @@ def image_embedding(img_bytes: bytes) -> Optional[np.ndarray]:
         model = get_insightface_model()
         cv_image = _load_image(img_bytes)
         
-        # InsightFace로 얼굴 임베딩 추출
-        embedding = model.encode_face(cv_image)
+        # 얼굴 감지 및 임베딩 추출
+        faces = model.get(cv_image)
         
-        if embedding is None:
+        if not faces or len(faces) == 0:
             print("⚠️ 이미지에서 얼굴을 감지할 수 없습니다.")
             return None
         
-        # InsightFace는 이미 정규화된 임베딩 반환 (normed_embedding)
-        return embedding.astype("float32")
+        # 가장 큰 얼굴 선택 (bbox 면적 기준)
+        face = max(faces, key=lambda x: (x.bbox[2] - x.bbox[0]) * (x.bbox[3] - x.bbox[1]))
+        
+        # 정규화된 임베딩 반환 (normed_embedding)
+        return face.normed_embedding.astype("float32")
         
     except Exception as e:
         print(f"❌ InsightFace 임베딩 생성 실패: {e}")
